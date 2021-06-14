@@ -1,28 +1,42 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <slideBar v-if="$route.meta.showTab">
+      <slideBarItem path="/firstpage">
+       <div slot="item-text">任务</div>
+      </slideBarItem>
+      <slideBarItem path="/community">
+        <div slot="item-text">社区</div>
+      </slideBarItem>
+      <slideBarItem path="/me">
+        <div slot="item-text">我的</div>
+      </slideBarItem>
+      <slideBarItem></slideBarItem>
+      <slideBarItem></slideBarItem>
+      <slideBarItem></slideBarItem>
+      <slideBarItem></slideBarItem>
+    </slideBar>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import slideBar from "@/components/slidebar/slideBar";
+import slideBarItem from "@/components/slidebar/slideBarItem";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    slideBar,
+    slideBarItem,
   }
 }
 </script>
 
 <style>
+@import "assets/css/base.css";
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height:100%;
+  width:100%;
+  font-family: normal;
+
 }
 </style>
