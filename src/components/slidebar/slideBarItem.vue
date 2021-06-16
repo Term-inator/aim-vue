@@ -30,8 +30,8 @@ export default {
 .slide-bar-item{
   flex: 2;
   text-align: center;
-  height: 60px;
-  font-size:35px;
+  height: 8vh;
+  font-size: 5vh;
 }
 .active{
   font-family:siyuan;

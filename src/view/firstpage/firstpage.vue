@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import task from '@/view/firstpage/components/task'
+import task from '@/components/task'
 import team from '@/view/firstpage/components/team'
 export default {
   name: "firstpage",
