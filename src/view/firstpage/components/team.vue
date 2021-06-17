@@ -3,15 +3,13 @@
     <div class="create">
       <p>你创建的小组</p>
       <ul>
-        <li>小组</li>
-        <li>小组</li>
+        <li v-for="(item, index) in create" :key="index">{{ item.teamName }}</li>
       </ul>
     </div>
     <div class="join">
       <p>你加入的小组</p>
       <ul>
-        <li>小组</li>
-        <li>小组</li>
+        <li v-for="(item, index) in join" :key="index">{{ item.teamName }}</li>
       </ul>
     </div>
   </div>
@@ -23,7 +21,20 @@ export default {
   data() {
     return {
       create: [
-        
+        {
+          teamName: "小组1"
+        },
+        {
+          teamName: "小组2"
+        }
+      ],
+      join: [
+        {
+          teamName: "小组4"
+        },
+        {
+          teamName: "小组5"
+        }
       ]
     }
   }

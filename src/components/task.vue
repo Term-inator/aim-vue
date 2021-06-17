@@ -19,8 +19,8 @@
         </div>
         <div class="right-container">
           <div class="privacy" @click="privacy">
-            <div v-if="isPrivacy">{{ privacy1 }}</div>
-            <div v-else>{{ privacy2 }}</div>
+            <div v-if="isPrivacy">公开</div>
+            <div v-else>私密</div>
           </div>
           <img v-if="!isShow" src="@/assets/img/task/modify.svg" class="edit" alt="" @click="show" />
           <img v-if="isShow" src="@/assets/img/task/cancel.svg" class="cancel" alt="" @click="cancel" />
@@ -34,30 +34,28 @@
 <script>
 export default {
   name: "task",
+  props: {
+    TaskData: {
+      type: Object,
+      required: true
+    }
+  },
   data(){
     return{
-      value:"这是一个我每天都要做的任务",
+      value: this.TaskData.value,
       newValue: "",
       isShow:false,
       isFinish:false,
       Red:require('@/assets/img/task/red.svg'),
       Green:require('@/assets/img/task/green.svg'),
-      time: new Date().toLocaleString(),
-      privacy1: "公开",
-      privacy2: "私密",
-      isPrivacy:true,
-      // lists:[
-      //   {
-      //     content:"这是一个我每天都要做的任务",
-      //   }
-      // ],
+      time: 0,
+      isPrivacy: true,
     }
   },
   watch:{
     isShow(){
-      console.log(this.isShow)
       this.newValue = this.value;
-    }
+    },
   },
   methods:{
     show(){

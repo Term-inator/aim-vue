@@ -1,6 +1,8 @@
 <template>
   <div class="firstpage">
-    <task></task>
+    <div v-for="(item, index) in tasks" :key="index">
+      <task :TaskData="item"></task>
+    </div>
     <team></team>
   </div>
 </template>
@@ -13,6 +15,24 @@ export default {
   components:{
     task,
     team
+  },
+  data() {
+    return {
+      tasks: [
+        {
+          value:"这是一个我每天都要做的任务",
+          isFinish:false,
+          time: new Date().toLocaleString(),
+          isPrivacy:true
+        },
+        {
+          value:"这是一个任务",
+          isFinish:false,
+          time: new Date().toLocaleString(),
+          isPrivacy:true
+        }
+      ]
+    }
   }
 }
 </script>
