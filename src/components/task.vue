@@ -42,13 +42,14 @@ export default {
   },
   data(){
     return{
+      id: this.TaskData.id,
       value: this.TaskData.value,
       newValue: "",
       isShow:false,
       isFinish:false,
       Red:require('@/assets/img/task/red.svg'),
       Green:require('@/assets/img/task/green.svg'),
-      time: 0,
+      time: this.TaskData.time,
       isPrivacy: true,
     }
   },
@@ -84,12 +85,12 @@ export default {
 <style scoped>
 .task{
   position: absolute;
-  top: 15%;
-  left: 0%;
-  right: 30%;
+  top: 15vh;
+  left: 0vw;
   display: flex;
   margin: 0 0 0 3vw;
   align-content:space-between;
+  background: white;
 }
 
 .task-double{
@@ -98,8 +99,8 @@ export default {
 }
 
 .task-double .task-content{
-  height: 25vh;
-  width: 25vw;
+  height: 27vh;
+  width: 27vw;
   flex: 1;
   padding: 1vh 1vw 1vh 1vw;
   border: 0.5px solid white;

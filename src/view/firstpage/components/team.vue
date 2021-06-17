@@ -53,7 +53,7 @@ ul, li {
   right: 0;
   width: 35%;
   height: 100vh;
-  margin: 8.2vh 0 0 0;
+  padding: 8.2vh 0 0 0;
   border-left: 0.5px solid white;
   box-shadow: 0 2px 5px rgba(0,0,0,.5);
 }
