@@ -4,8 +4,8 @@
       <div class="task-content">
         <div class="left-container">
           <div class="complete">
-            <img v-if="isFinish" @click="finish" :src="Red" alt="" />
-            <img v-else @click="finish" :src="Green" alt="" />
+            <img v-if="isFinish" @click="finish" :src="Green" alt="" />
+            <img v-else @click="finish" :src="Red" alt="" />
           </div>
         </div>
         <div class="middle-container">
@@ -13,8 +13,11 @@
             <textarea type="text" name="taskChange" style="width: flex;" v-model="newValue" />
           </div>
           <div v-else class="value">{{ value }}</div>
-          <div class="complete-time">
-            <span> {{ time }} </span>
+          <div v-if="!isShow" isclass="complete-time">
+            <span> {{ ddl }} </span>
+          </div>
+          <div v-else>
+            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" size="small" placeholder="选择日期和时间（不含秒）" style="width: 100%" v-model="newDdl"></Date-picker>
           </div>
         </div>
         <div class="right-container">
@@ -49,14 +52,16 @@ export default {
       isFinish:false,
       Red:require('@/assets/img/task/red.svg'),
       Green:require('@/assets/img/task/green.svg'),
-      time: this.TaskData.time,
+      ddl: this.TaskData.ddl, //TODO set dll
+      newDdl: "",
       isPrivacy: true,
     }
   },
   watch:{
     isShow(){
-      this.newValue = this.value;
-    },
+      this.newValue = this.value
+      this.newDdl = this.ddl
+    }
   },
   methods:{
     show(){
@@ -73,6 +78,7 @@ export default {
     confirm() {
       this.show()
       this.value = this.newValue
+      this.ddl = new Date(this.newDdl).toLocaleString()
       //axios
     },
     cancel() {
@@ -84,11 +90,8 @@ export default {
 
 <style scoped>
 .task{
-  position: absolute;
-  top: 15vh;
-  left: 0vw;
+  position: relative;
   display: flex;
-  margin: 0 0 0 3vw;
   align-content:space-between;
   background: white;
 }
@@ -99,9 +102,8 @@ export default {
 }
 
 .task-double .task-content{
-  height: 27vh;
-  width: 27vw;
-  flex: 1;
+  height: 22vh;
+  width: 22vw;
   padding: 1vh 1vw 1vh 1vw;
   border: 0.5px solid white;
   box-shadow: 0 2px 5px rgba(0,0,0,.5);
@@ -126,7 +128,7 @@ export default {
 
 .task-content .middle-container .value {
   width: flex;
-  height: 70%;
+  height: 64%;
   margin: 3vh 0 0 0;
   font-size: 3.5vh;
   white-space: pre-wrap;
@@ -149,7 +151,7 @@ export default {
 
 .task-content .right-container .edit {
   position: absolute;
-  bottom: 1vh;
+  bottom: 2vh;
   width: 4vh;
   height: 4vh;
 }

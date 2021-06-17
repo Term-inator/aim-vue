@@ -34,7 +34,7 @@ export default {
 <style>
 @import "assets/css/base.css";
 #app {
-  height:100%;
+  height:100vh;
   width:100%;
   font-family: normal;
 
