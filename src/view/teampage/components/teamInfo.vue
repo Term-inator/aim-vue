@@ -1,5 +1,5 @@
 <template>
-  <div class="team">
+  <div class="teamInfo">
     <div class="create">
       <div class="title">
         你创建的小组
@@ -7,15 +7,7 @@
       </div>
       <div class="create-wrapper">
         <ul>
-          <li v-for="(item, index) in create" :key="index">
-            <router-link :to="{
-              name: 'team',
-              path: '/team/:teamId',
-              params: {
-                teamId: item.teamId
-              }
-              }">{{ item.teamName }}</router-link>
-          </li>
+          <li v-for="(item, index) in create" :key="index">{{ item.teamName }}</li>
         </ul>
       </div>
     </div>
@@ -87,7 +79,7 @@
 
 <script>
 export default {
-  name: "team",
+  name: "teamInfo",
   data() {
     return {
       create_team: false,
@@ -105,17 +97,29 @@ export default {
       },
       create: [
         {
-          teamId: 0,
           teamName: "小组1"
         },
         {
-          teamId: 1,
           teamName: "小组2"
         },
         {
-          teamId: 3,
           teamName: "小组3"
-        }
+        },
+        {
+          teamName: "小组4"
+        },
+        {
+          teamName: "小组5"
+        },
+        {
+          teamName: "小组6"
+        },
+        {
+          teamName: "小组7"
+        },
+        {
+          teamName: "小组8"
+        },
       ],
       join: [
         {

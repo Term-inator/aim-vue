@@ -1,9 +1,8 @@
 <template>
-  <div class="firstpage">
+  <div class="teampage">
     <div class="main">
       <div class="add-wrapper">
-        <div>周期任务</div>
-        <div>普通任务</div>
+        <div>{{ teamName }}</div>
         <img src="@/assets/img/add.svg" alt="" class="add" @click="addTask">
       </div>
       <div class="period-task">
@@ -66,9 +65,9 @@
 
 <script>
 import task from '@/components/task'
-import team from '@/view/firstpage/components/team'
+import team from '@/view/teampage/components/teamInfo'
 export default {
-  name: "firstpage",
+  name: "teampage",
   components:{
     task,
     team
@@ -191,16 +190,16 @@ export default {
 
 <style scoped>
 @import "../../assets/css/base.css";
-.firstpage{
+.teampage{
   overflow: hidden;
 }
 
-.firstpage .main {
+.teampage .main {
   height: 88vh;
   vertical-align: top;
 }
 
-.firstpage .main .add-wrapper {
+.teampage .main .add-wrapper {
   float: left;
   width: 75%;
   height: flex;
@@ -208,49 +207,47 @@ export default {
   margin: 10vh 0 0 0;
 }
 
-.firstpage .main .add-wrapper div {
+.teampage .main .add-wrapper div {
   display: inline-block;
   margin: 0 16vw 0 2vw;
   font-size: 3vh;
 }
 
-.firstpage .main .add-wrapper .add {
+.teampage .main .add-wrapper .add {
   float: right;
   width: 4vh;
   height: 4vh;
   cursor: pointer;
 }
 
-.firstpage .main .period-task {
+.teampage .main .period-task {
   float: left;
   max-height: 83vh;
-  min-height: 83vh;
   width: 26vw;
   overflow-y: auto;
 }
 
-.firstpage .main .period-task::-webkit-scrollbar {
+.teampage .main .period-task::-webkit-scrollbar {
 	border-width:1px;
 }
 
-.firstpage .main .normal-task {
+.teampage .main .normal-task {
   float: left;
   max-height: 83vh;
-  min-height: 83vh;
   width: 50vw;
   overflow-y: auto;
 }
 
-.firstpage .main .normal-task::-webkit-scrollbar {
+.teampage .main .normal-task::-webkit-scrollbar {
 	border-width:1px;
 }
 
-.firstpage .main .period-task .task {
+.teampage .main .period-task .task {
   display: inline-block;
   margin: 1vh 1vw 1vh 0.8vw;
 }
 
-.firstpage .main .normal-task .task {
+.teampage .main .normal-task .task {
   display: inline-block;
   margin: 1vh 0.8vw 1vh 0.1vw;
 }

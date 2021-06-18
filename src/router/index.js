@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 const firstpage = () => import('../view/firstpage/firstpage')
 const community = () => import('../view/community/community')
 const me = () => import('../view/me/me')
+const teampage = () => import('../view/teampage/teampage')
 Vue.use(VueRouter)
 const routes =[
    {
@@ -31,6 +32,14 @@ const routes =[
       showTab:true
     }
   },
+  {
+    name: 'team',
+    path:'/team/:teamId',
+    component: teampage,
+    meta: {
+      showTab: true
+    }
+  }
 ]
 
 const router = new VueRouter({

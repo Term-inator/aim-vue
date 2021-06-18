@@ -2,22 +2,29 @@
   <div class="task">
     <div class="task-double">
       <div class="task-content">
-        <div class="left-container">
-          <div class="complete">
+        <Row>
+          <Col span="2" class-name="complete">
             <img v-if="isFinish" @click="finish" :src="Green" alt="" />
             <img v-else @click="finish" :src="Red" alt="" />
-          </div>
-        </div>
-        <div class="middle-container">
-          <div v-if="isShow" class="value">
-            <textarea type="text" name="taskChange" style="width: flex;" v-model="newValue" />
-          </div>
-          <div v-else class="value">{{ value }}</div>
-          <div v-if="!isShow" isclass="complete-time">
-            <span> {{ ddl }} </span>
-          </div>
-          <div v-else>
+          </Col>
+          <Col span="2" offset="19" class-name="privacy" @click.native="privacy">
+            <div v-if="isPrivacy">公开</div>
+            <div v-else>私密</div>
+          </Col>
+        </Row>
+        <Row style="height: 10vh">
+          <Col v-if="isShow" class-name="value" span="18">
+            <textarea type="text" name="taskChange" style="width: 100%;" v-model="newValue" />
+          </Col>
+          <Col v-else class-name="value" span="18">
+            <div>{{ value }}</div>
+          </Col>
+        </Row>
+        <br>
+        <Row>
+          <Col span="18">
             <Date-picker
+              v-if="isShow"
               type="datetime"
               format="yyyy-MM-dd HH:mm"
               size="small"
@@ -25,17 +32,20 @@
               style="width: 100%"
               v-model="newDdl">
             </Date-picker>
-          </div>
-        </div>
-        <div class="right-container">
-          <div class="privacy" @click="privacy">
-            <div v-if="isPrivacy">公开</div>
-            <div v-else>私密</div>
-          </div>
-          <img v-if="!isShow" src="@/assets/img/task/modify.svg" class="edit" alt="" @click="show" />
-          <img v-if="isShow" src="@/assets/img/task/cancel.svg" class="cancel" alt="" @click="cancel" />
-          <img v-if="isShow" src="@/assets/img/task/confirm.svg" class="confirm" alt="" @click="confirm" />
-        </div>
+            <div v-else>
+              <span> {{ ddl }} </span>
+            </div>
+          </Col>
+          <Col v-if="isShow" span="2" offset="1">
+            <img src="@/assets/img/task/confirm.svg" alt="" style="width: 3vh; height: 3vh;" @click="confirm" />
+          </Col>
+          <Col v-if="isShow" span="2" class-name="cancel">
+            <img src="@/assets/img/task/cancel.svg" alt="" style="width: 2.5vh; height: 2.5vh;" @click="cancel" />
+          </Col>
+          <Col v-if="!isShow" span="2" offset="3" class-name="edit">
+            <img src="@/assets/img/modify.svg" alt="" style="width: 3.5vh; height: 3.5vh;" @click="show" />
+          </Col>
+        </Row>
       </div>
     </div>
   </div>
@@ -115,69 +125,24 @@ export default {
 .task-double .task-content{
   height: 22vh;
   width: 22vw;
-  padding: 1vh 1vw 1vh 1vw;
+  padding: 1vh 0vw 1vh 1vw;
   border: 0.5px solid white;
   box-shadow: 0 2px 5px rgba(0,0,0,.5);
   white-space: nowrap;
-  overflow: hidden;
 }
 
-.task-content .left-container {
-  float: left;
-  width: 10%;
-  height: 100%;
-  vertical-align: top;
-}
-
-.task-content .middle-container {
-  display: inline-block;
-  width: flex;
-  max-width: 80%;
-  height: 100%;
-  vertical-align: top;
-}
-
-.task-content .middle-container .value {
+.task-content .value {
   width: flex;
   height: 64%;
-  margin: 3vh 0 0 0;
   font-size: 3.5vh;
   white-space: pre-wrap;
 }
 
-.task-content .middle-container .complete-time{
+.task-content .complete-time{
   font-size: 1.8vh;
 }
 
-.task-content .right-container {
-  float: right;
-  width: 10%;
-  height: 100%;
-  vertical-align: top;
-}
-
-.task-content .right-container .privacy{
+.task-content .privacy{
   font-size: 2vh;
-}
-
-.task-content .right-container .edit {
-  position: absolute;
-  bottom: 2vh;
-  width: 4vh;
-  height: 4vh;
-}
-
-.task-content .right-container .confirm {
-  position: absolute;
-  bottom: 2vh;
-  width: 3vh;
-  height: 3vh;
-}
-
-.task-content .right-container .cancel {
-  position: absolute;
-  bottom: 6vh;
-  width: 2.5vh;
-  height: 2.5vh;
 }
 </style>
