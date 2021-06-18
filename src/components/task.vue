@@ -17,7 +17,14 @@
             <span> {{ ddl }} </span>
           </div>
           <div v-else>
-            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" size="small" placeholder="选择日期和时间（不含秒）" style="width: 100%" v-model="newDdl"></Date-picker>
+            <Date-picker
+              type="datetime"
+              format="yyyy-MM-dd HH:mm"
+              size="small"
+              placeholder="选择任务截止日期"
+              style="width: 100%"
+              v-model="newDdl">
+            </Date-picker>
           </div>
         </div>
         <div class="right-container">
@@ -47,20 +54,23 @@ export default {
     return{
       id: this.TaskData.id,
       value: this.TaskData.value,
-      newValue: "",
       isShow:false,
       isFinish:false,
       Red:require('@/assets/img/task/red.svg'),
       Green:require('@/assets/img/task/green.svg'),
       ddl: this.TaskData.ddl, //TODO set dll
-      newDdl: "",
       isPrivacy: true,
+
+      newValue: "",
+      newDdl: "",
+      oldIsPrivacy: ""
     }
   },
   watch:{
     isShow(){
       this.newValue = this.value
       this.newDdl = this.ddl
+      this.oldIsPrivacy = this.isPrivacy
     }
   },
   methods:{
@@ -83,6 +93,7 @@ export default {
     },
     cancel() {
       this.show()
+      this.isPrivacy = this.oldIsPrivacy
     }
   }
 }

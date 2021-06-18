@@ -32,6 +32,7 @@ export default {
   text-align: center;
   height: 8vh;
   font-size: 5vh;
+  cursor: pointer;
 }
 .active{
   font-family:siyuan;

@@ -2,7 +2,9 @@
   <div class="firstpage">
     <div class="main">
       <div class="add-wrapper">
-        <img src="@/assets/img/firstpage/add.svg" alt="" class="add" @click="add">
+        <div>周期任务</div>
+        <div>普通任务</div>
+        <img src="@/assets/img/firstpage/add.svg" alt="" class="add" @click="addTask">
       </div>
       <div class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
@@ -16,6 +18,49 @@
       </div>
       <team style="float: right;"></team>
     </div>
+    <Modal
+      width="32"
+      title="添加任务"
+      v-model="add_task"
+      :closable="false"
+      @on-ok="insertTask">
+      <div>
+        <div style="height: 4vh; margin: 0.5vh 0 0 0">
+          <Radio-group v-model="buffer.task.TaskType">
+            <Radio label="normal" size="large">
+              <span>普通任务</span>
+            </Radio>
+            <Radio label="period" size="large">
+              <span>周期任务</span>
+            </Radio>
+          </Radio-group>
+        </div>
+        <div style="height: 4vh; margin: 1vh 0 0 0">
+          <Radio-group v-model="buffer.task.privacyType">
+            <Radio label="public" size="large">
+              <span>公开</span>
+            </Radio>
+            <Radio label="private" size="large">
+              <span>私密</span>
+            </Radio>
+          </Radio-group>
+        </div>
+        <div style="height: 8vh; margin: 1vh 0 2vh 0; font-size: 2.2vh;">
+          任务名称
+          <input type="text" style="width: 90%;" v-model="buffer.task.value">
+        </div>
+        <div style="height: 8vh;">
+          <Date-picker
+            type="datetime"
+            format="yyyy-MM-dd HH:mm"
+            size="large"
+            placeholder="选择任务截止日期"
+            style="width: 90%"
+            v-model="buffer.task.ddl">
+          </Date-picker>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -30,6 +75,15 @@ export default {
   },
   data() {
     return {
+      add_task: false,
+      buffer: {
+        task: {
+          value: "",
+          ddl: "",
+          TaskType: "normal",
+          privacyType: "public"
+        }
+      },
       periodTasks: [
         {
           id: 0,
@@ -113,40 +167,6 @@ export default {
       ]
     }
   },
-  computed: {
-    periodTaskPosition() {
-      return function() {
-        //let height = 22
-        //let vertical_gap = 4
-        // let left_base = 2
-        // let top_base = 15.5
-        //let row = index
-        return {
-          'display': 'inline-block',
-          // 'top': row*height + row*vertical_gap + 'vh',
-          'margin': '1vh 0vw 3vh 2vw' 
-        }
-      }
-    },
-    normalTaskPosition() {
-      return function() {
-        // let width = 22
-        // let height = 22
-        // let horizontal_gap = 2
-        // let vertical_gap = 4
-        // let left_base = 2 + width + horizontal_gap
-        // let top_base = 15.5
-        // let row = Math.floor(index/2)
-        // let col = index%2
-        return {
-          'display': 'inline-block',
-          // 'left': col*width + col*horizontal_gap + 'vw',
-          // 'top': row*height + row*vertical_gap + 'vh',
-          'margin': '1vh 0.5vw 3vh 1.5vw'
-        }
-      }
-    }
-  },
   watch: {
     tasks: {
       handler(val) {
@@ -158,22 +178,12 @@ export default {
     }
   },
   methods: {
-    add() {
-      //TODO
-      console.log("TODO")
-      this.insertTask({
-        
-          id: 2,
-          value: "nothing",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        
-      })
+    addTask() {
+      this.add_task = true
     },
-    insertTask(task) {
-      //in some specific order
-      this.$set(this.tasks, 1, task)
+    insertTask() {
+      //TODO
+      console.log(this.buffer.task)
     }
   }
 }
@@ -196,6 +206,12 @@ export default {
   height: flex;
   padding: 0 3vw 0 0;
   margin: 10vh 0 0 0;
+}
+
+.firstpage .main .add-wrapper div {
+  display: inline-block;
+  margin: 0 16vw 0 2vw;
+  font-size: 3vh;
 }
 
 .firstpage .main .add-wrapper .add {
