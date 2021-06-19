@@ -5,6 +5,8 @@ const firstpage = () => import('../view/firstpage/firstpage')
 const community = () => import('../view/community/community')
 const me = () => import('../view/me/me')
 const teampage = () => import('../view/teampage/teampage')
+const login = () => import('../view/login/login')
+
 Vue.use(VueRouter)
 const routes =[
    {
@@ -33,9 +35,17 @@ const routes =[
     }
   },
   {
-    name: 'team',
-    path:'/team/:teamId',
+    name: 'teampage',
+    path:'/teampage/:teamId',
     component: teampage,
+    meta: {
+      showTab: true
+    }
+  },
+  {
+    name: 'login',
+    path: '/login',
+    component: login,
     meta: {
       showTab: true
     }

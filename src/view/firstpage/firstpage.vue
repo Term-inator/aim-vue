@@ -6,14 +6,14 @@
         <div>普通任务</div>
         <img src="@/assets/img/add.svg" alt="" class="add" @click="addTask">
       </div>
-      <div class="period-task">
+      <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :TaskData="item"></task>
+          <task :TaskData="item" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
-      <div class="normal-task">
+      <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :TaskData="item"></task>
+          <task :TaskData="item" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
       <team style="float: right;"></team>
@@ -22,16 +22,25 @@
       width="32"
       title="添加任务"
       v-model="add_task"
-      :closable="false"
+      :mask-closable="false"
       @on-ok="insertTask">
       <div>
         <div style="height: 4vh; margin: 0.5vh 0 0 0">
           <Radio-group v-model="buffer.task.TaskType">
-            <Radio label="normal" size="large">
-              <span>普通任务</span>
+            <Radio label="once" size="large">
+              <span>单次</span>
             </Radio>
-            <Radio label="period" size="large">
-              <span>周期任务</span>
+            <Radio label="daily" size="large">
+              <span>每天</span>
+            </Radio>
+            <Radio lable="weekly" size="large">
+              <span>每周</span>
+            </Radio>
+            <Radio lable="monthly" size="large">
+              <span>每月</span>
+            </Radio>
+            <Radio lable="yearly" size="large">
+              <span>每年</span>
             </Radio>
           </Radio-group>
         </div>
@@ -76,6 +85,8 @@ export default {
   data() {
     return {
       add_task: false,
+      reloadPeriodTask: true,
+      reloadNormalTask: true,
       buffer: {
         task: {
           value: "",
@@ -184,7 +195,35 @@ export default {
     insertTask() {
       //TODO
       console.log(this.buffer.task)
-    }
+    },
+    deletePeriodTask(taskId) {
+      this.reloadPeriodTask = false;
+      this.$nextTick(() => {
+        this.reloadPeriodTask = true;
+      })
+      
+      for(let i = 0; i < this.periodTasks.length; ++i) {
+        if(this.periodTasks[i].id == taskId) {
+          this.periodTasks.splice(i, 1);
+          return
+        }
+      }
+      console.log("err");
+    },
+    deleteNormalTask(taskId) {
+      this.reloadNormalTask = false;
+      this.$nextTick(() => {
+        this.reloadNormalTask = true;
+      })
+      
+      for(let i = 0; i < this.normalTasks.length; ++i) {
+        if(this.normalTasks[i].id == taskId) {
+          this.normalTasks.splice(i, 1);
+          return
+        }
+      }
+      console.log("err");
+    },
   }
 }
 </script>

@@ -2,8 +2,14 @@
   <div class="teampage">
     <div class="main">
       <div class="add-wrapper">
-        <div>{{ teamName }}</div>
+        <div class="title"><b>{{ team.teamName }}</b></div>
         <img src="@/assets/img/add.svg" alt="" class="add" @click="addTask">
+        <img v-if="user.authority == 'creator'" src="@/assets/img/delete.svg" alt="" class="add" @click="deleteTeam" />
+        <img v-else src="@/assets/img/exit.svg" alt="" class="add" @click="exitTeam" />
+        <div>
+            <div class="title">周期任务</div>
+            <div class="title">普通任务</div>
+        </div>
       </div>
       <div class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
@@ -15,22 +21,31 @@
           <task :TaskData="item"></task>
         </div>
       </div>
-      <team style="float: right;"></team>
+      <teamInfo style="float: right;" :TeamData="team"></teamInfo>
     </div>
     <Modal
       width="32"
       title="添加任务"
       v-model="add_task"
-      :closable="false"
+      :mask-closable="false"
       @on-ok="insertTask">
       <div>
         <div style="height: 4vh; margin: 0.5vh 0 0 0">
           <Radio-group v-model="buffer.task.TaskType">
-            <Radio label="normal" size="large">
-              <span>普通任务</span>
+            <Radio label="once" size="large">
+              <span>单次</span>
             </Radio>
-            <Radio label="period" size="large">
-              <span>周期任务</span>
+            <Radio label="daily" size="large">
+              <span>每天</span>
+            </Radio>
+            <Radio lable="weekly" size="large">
+              <span>每周</span>
+            </Radio>
+            <Radio lable="monthly" size="large">
+              <span>每月</span>
+            </Radio>
+            <Radio lable="yearly" size="large">
+              <span>每年</span>
             </Radio>
           </Radio-group>
         </div>
@@ -65,16 +80,21 @@
 
 <script>
 import task from '@/components/task'
-import team from '@/view/teampage/components/teamInfo'
+import teamInfo from '@/view/teampage/components/teamInfo'
 export default {
   name: "teampage",
   components:{
     task,
-    team
+    teamInfo
   },
   data() {
     return {
       add_task: false,
+      user: {
+          userId: 0,
+          token: 0,
+          authority: "creator"
+      },
       buffer: {
         task: {
           value: "",
@@ -82,6 +102,12 @@ export default {
           TaskType: "normal",
           privacyType: "public"
         }
+      },
+      team: {
+        teamId: "",
+        teamName: "",
+        memberNum: "",
+        description: ""
       },
       periodTasks: [
         {
@@ -176,6 +202,14 @@ export default {
       deep: true
     }
   },
+  created() {
+    this.team.teamId = this.$route.params.teamId
+    //axios
+    this.team = {teamId: 0, teamName: "好好学习", memberNum: 10, description: "非常好"}
+  },
+  mounted() {
+      
+  },
   methods: {
     addTask() {
       this.add_task = true
@@ -183,6 +217,16 @@ export default {
     insertTask() {
       //TODO
       console.log(this.buffer.task)
+    },
+    deleteTeam() {
+        //axios
+        //confirm
+        console.log("delete team")
+    },
+    exitTeam() {
+        //axios
+        //confirm
+        console.log("exit team")
     }
   }
 }
@@ -195,7 +239,7 @@ export default {
 }
 
 .teampage .main {
-  height: 88vh;
+  height: 80vh;
   vertical-align: top;
 }
 
@@ -207,12 +251,6 @@ export default {
   margin: 10vh 0 0 0;
 }
 
-.teampage .main .add-wrapper div {
-  display: inline-block;
-  margin: 0 16vw 0 2vw;
-  font-size: 3vh;
-}
-
 .teampage .main .add-wrapper .add {
   float: right;
   width: 4vh;
@@ -220,9 +258,15 @@ export default {
   cursor: pointer;
 }
 
+.teampage .main .add-wrapper .title {
+    display: inline-block;
+    margin: 0 16vw 0 2vw;
+    font-size: 3vh;
+}
+
 .teampage .main .period-task {
   float: left;
-  max-height: 83vh;
+  max-height: 80vh;
   width: 26vw;
   overflow-y: auto;
 }
@@ -233,7 +277,7 @@ export default {
 
 .teampage .main .normal-task {
   float: left;
-  max-height: 83vh;
+  max-height: 80vh;
   width: 50vw;
   overflow-y: auto;
 }

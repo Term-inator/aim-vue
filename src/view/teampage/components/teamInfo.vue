@@ -1,78 +1,62 @@
 <template>
   <div class="teamInfo">
-    <div class="create">
+    <div class="description">
       <div class="title">
-        你创建的小组
-        <img src="@/assets/img/add.svg" alt="" class="create-team" @click="createTeam" />
+        简介
+        <img v-if="showEditor" src="@/assets/img/cancel.svg" alt="" class="edit-description" @click="cancel" style="width: 4.2vh; height: 4.2vh">
+        <img v-if="showEditor" src="@/assets/img/confirm.svg" alt="" class="edit-description" @click="confirm">
+        <img v-if="!showEditor" src="@/assets/img/modify.svg" alt="" class="edit-description" @click="editDescription" />
       </div>
-      <div class="create-wrapper">
-        <ul>
-          <li v-for="(item, index) in create" :key="index">{{ item.teamName }}</li>
-        </ul>
+      <div class="description-wrapper">
+        <div v-if="showEditor">
+          <textarea autofocus type="text" name="description" rows="12"
+          style="width: 90%; height: 20vh;"
+          v-model="team.newDescription"></textarea>
+        </div>
+        <div v-else>{{ team.description }}</div>
       </div>
     </div>
-    <div class="join">
+    <div class="member">
       <div class="title">
-        你加入的小组
-        <img src="@/assets/img/add.svg" alt="" class="join-team" @click="joinTeam"/>
+        成员 {{ team.memberNum }} 人
       </div>
-      <div class="join-wrapper">
+      <div v-if="reloadMember" class="member-wrapper">
         <ul>
-          <li v-for="(item, index) in join" :key="index">{{ item.teamName }}</li>
+          <li v-for="(item, index) in member" :key="index">
+            <Row>
+              <Col span="18" @click="visitMember(item.memberId)">{{ item.memberName }}</Col>
+              <Col span="2" offset="2">
+                <img v-if="user.authority != 'member' && user.id != item.memberId" src="@/assets/img/teamInfo/kick_out.svg" alt="" @click="kickOut(item.memberId)" style="width: 4.2vh; height: 4.2vh">
+                <img v-else alt="">
+              </Col>
+              <Col span="2" @click.native="changeLevel(item.memberId)">
+                <img v-if="item.authority == 'creator'" src="@/assets/img/teamInfo/person_orange.svg" alt="" style="width: 4.2vh; height: 4.2vh" />
+                <img v-if="item.authority == 'admin'" src="@/assets/img/teamInfo/person_green.svg" alt="" style="width: 4.2vh; height: 4.2vh" />
+                <img v-if="item.authority == 'member'" src="@/assets/img/teamInfo/person_grey.svg" alt="" style="width: 4.2vh; height: 4.2vh" />
+              </Col>
+            </Row>
+          </li>
         </ul>
       </div>
     </div>
     <Modal
       width="32"
-      title="创建小组"
-      v-model="create_team"
-      :closable="false"
-      @on-ok="insertCreate"
-      @on-cancel="reset(buffer.team)">
-      <div>
-        <div style="height: 8vh; margin: 1vh 0 2vh 0; font-size: 2.2vh;">
-          小组名称
-          <input type="text" style="width: 90%;" v-model="buffer.team.teamName">
-        </div>
-        <div style="font-size: 2.2vh">
-          小组描述
-          <textarea rows="3" style="width: 90%;" placeholder="可不填" v-model="buffer.team.description"></textarea>
-        </div>
-      </div>
-    </Modal>
-    <Modal
-      width="32"
-      title="加入小组"
-      v-model="join_team"
-      :closable="false"
-      ok-text="加入"
-      cancel-text="取消"
-      @on-ok="insertJoin"
-      @on-cancel="reset(buffer.teamToJoin)">
-      <Row>
-        <Col span="3"><div style="font-size: 2.2vh;">小组号</div></Col>
-        <Col span="19">
-          <div style="height: 8vh; font-size: 2.2vh;">
-            <input type="text" style="width: 96%;" v-model="buffer.teamToJoin.teamId">
-          </div>
-        </Col>
-        <Col span="2">
-          <img src="@/assets/img/firstpage/search.svg" alt=""
-            style="width: 4vh; height: 4vh; cursor: pointer;"
-            @click="searchTeam"/>
-        </Col>
-      </Row>
-      <Row v-if="buffer.teamToJoin.status == 1">
-        <Col><div style="font-size: 2.2vh">搜索结果</div></Col>
-      </Row>
-      <Row v-if="buffer.teamToJoin.status == 1">
-        <Col span="24">
-          <div style="font-size: 2.2vh">{{ buffer.teamToJoin.teamName }}</div>
-        </Col>
-      </Row>
-      <Row v-if="buffer.teamToJoin.status == -1">
-        <Alert type="error">查不到该小组</Alert>
-      </Row>
+      title="更改权限"
+      v-model="change_level"
+      :mask-closable="false"
+      @on-ok="updateLevel"
+      @on-cancel="reset(buffer.member)">
+      <Radio-group v-model="buffer.member.authority">
+        <Radio v-if="user.authority == 'creator'" label="creator" size="large">
+          <span>创建者</span>
+        </Radio>
+        <Radio v-if="user.authority != 'member'" label="admin" size="large">
+          <span>管理员</span>
+        </Radio>
+        <Radio label="member" size="large">
+          <span>成员</span>
+        </Radio>
+      </Radio-group>
     </Modal>
   </div>
 </template>
@@ -80,77 +64,108 @@
 <script>
 export default {
   name: "teamInfo",
+  props: {
+    TeamData: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
-      create_team: false,
-      join_team: false,
+      showEditor: false,
+      reloadMember: true,
+      change_level: false,
+      user: {
+        id: 0,
+        token: 0,
+        authority: "admin"
+      },
       buffer: {
-        team: {
-          teamName: "",
-          description: ""
-        },
-        teamToJoin: {
-          status: 0, //-1没搜到, 0没搜, 1搜到
-          teamId: "",
-          teamName: ""
+        member: {
+          memberId: "",
+          memberName: "",
+          authority: ""
         }
       },
-      create: [
-        {
-          teamName: "小组1"
+      team: {
+        teamId: this.TeamData.teamId,
+        memberNum: this.TeamData.memberNum,
+        description: this.TeamData.description,
+
+        newDescription: this.TeamData.description
+      },
+      member: [{
+          memberId: 0,
+          memberName: "张三",
+          authority: "creator"
         },
         {
-          teamName: "小组2"
+          memberId: 1,
+          memberName: "李四",
+          authority: "admin"
         },
         {
-          teamName: "小组3"
-        },
-        {
-          teamName: "小组4"
-        },
-        {
-          teamName: "小组5"
-        },
-        {
-          teamName: "小组6"
-        },
-        {
-          teamName: "小组7"
-        },
-        {
-          teamName: "小组8"
-        },
-      ],
-      join: [
-        {
-          teamName: "小组4"
-        },
-        {
-          teamName: "小组5"
+          memberId: 2,
+          memberName: "王五",
+          authority: "member"
         }
       ]
     }
   },
+  created() {
+    this.getTeam();
+  },
   methods: {
-    createTeam() {
-      this.create_team = true
-    },
-    insertCreate() {
-      //TODO fail or succeed
+    getTeam() {
       //axios
-      this.reset(this.buffer.team)
+      //member
     },
-    searchTeam() {
-      //TODO
+    editDescription() {
+      this.showEditor = !this.showEditor
+    },
+    confirm() {
+      this.editDescription()
+      this.team.description = this.team.newDescription
       //axios
     },
-    joinTeam() {
-      this.join_team = true
+    cancel() {
+      this.editDescription()
+      this.team.newDescription = this.team.description
     },
-    insertJoin() {
-      //TODO fail or succeed
+    changeLevel(memberId) {
+      this.member.forEach(e => {
+        if(e.memberId == memberId) {
+          this.buffer.member = e
+        }
+      })
+      this.change_level = true
+    },
+    updateLevel() {
       //axios
-      this.resetObject(this.buffer.teamToJoin)
+      //undate picture
+      this.reloadMember = false
+      this.$nextTick(() => {
+        this.reloadMember = true
+      })
+      console.log(this.buffer.member.memberId)
+    },
+    kickOut(memberId) {
+      console.log(memberId)
+      //axios
+      //update member
+      this.reloadMember = false
+      this.$nextTick(() => {
+        this.reloadMember = true
+      })
+      for(let i = 0; i < this.member.length; ++i) {
+        if(this.member[i].memberId == memberId) {
+          this.member.splice(i, 1)
+          break
+        }
+      }
+    },
+    visitMember(memberId) {
+      console.log(memberId)
     },
     resetObject(obj) {
       Object.keys(obj).forEach((key) => {
@@ -168,7 +183,7 @@ ul, li {
   list-style: none;
 }
 
-.team {
+.teamInfo {
   position: fixed;
   right: 0;
   width: 25%;
@@ -178,50 +193,52 @@ ul, li {
   box-shadow: 0 2px 5px rgba(0,0,0,.5);
 }
 
-.team .create {
+.teamInfo .description {
   width: 100%;
   height: 35%;
 }
 
-.team .create .create-wrapper {
+.teamInfo .description .description-wrapper {
   max-height: 25vh;
+  padding: 0.5vh 0 0 1vw;
+  font-size: 2.8vh;
   overflow-y: auto;
 }
 
-.team .create .create-wrapper::-webkit-scrollbar {
+.teamInfo .description .description-wrapper::-webkit-scrollbar {
 	border-width:1px;
 }
 
-.team .join {
+.teamInfo .member {
   width: 100%;
   max-height: 65%;
 }
 
-.team .join .join-wrapper {
+.teamInfo .member .member-wrapper {
   max-height: 65vh;
   overflow-y: auto;
 }
 
-.team .join .join-wrapper::-webkit-scrollbar {
+.teamInfo .member .member-wrapper::-webkit-scrollbar {
 	border-width:1px;
 }
 
-.team .create .title, .team .join .title {
+.teamInfo .description .title, .teamInfo .member .title {
   height: 6vh;
   font-size: 3.5vh;
   font-weight: bold;
   border-bottom: 1px solid rgba(0,0,0,.4);
 }
 
-.team .create .create-team, .team .join .join-team {
+.teamInfo .description .edit-description {
   float: right;
-  width: 4vh;
-  height: 4vh;
+  width: 5vh;
+  height: 5vh;
   padding: 1vh 0 0 0;
   cursor: pointer;
 }
 
-.team .create li, .team .join li {
+.teamInfo .description li, .teamInfo .member .member-wrapper li {
   float: left;
   clear: left;
   width: 100%;

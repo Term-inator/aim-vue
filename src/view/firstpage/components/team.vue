@@ -9,8 +9,8 @@
         <ul>
           <li v-for="(item, index) in create" :key="index">
             <router-link :to="{
-              name: 'team',
-              path: '/team/:teamId',
+              name: 'teampage',
+              path: 'teampage/:teamId',
               params: {
                 teamId: item.teamId
               }
@@ -26,7 +26,15 @@
       </div>
       <div class="join-wrapper">
         <ul>
-          <li v-for="(item, index) in join" :key="index">{{ item.teamName }}</li>
+          <li v-for="(item, index) in join" :key="index">
+            <router-link :to="{
+              name: 'teampage',
+              path: '/teampage/:teamId',
+              params: {
+                teamId: item.teamId
+              }
+              }">{{ item.teamName }}</router-link>
+          </li>
         </ul>
       </div>
     </div>
@@ -34,7 +42,7 @@
       width="32"
       title="创建小组"
       v-model="create_team"
-      :closable="false"
+      :mask-closable="false"
       @on-ok="insertCreate"
       @on-cancel="reset(buffer.team)">
       <div>
@@ -52,7 +60,7 @@
       width="32"
       title="加入小组"
       v-model="join_team"
-      :closable="false"
+      :mask-closable="false"
       ok-text="加入"
       cancel-text="取消"
       @on-ok="insertJoin"
@@ -119,9 +127,11 @@ export default {
       ],
       join: [
         {
+          teamId: 10,
           teamName: "小组4"
         },
         {
+          teamId: 11,
           teamName: "小组5"
         }
       ]
@@ -134,9 +144,16 @@ export default {
     insertCreate() {
       //TODO fail or succeed
       //axios
-      this.reset(this.buffer.team)
+      this.resetObject(this.buffer.team)
     },
     searchTeam() {
+      console.log(2)
+      if(this.buffer.teamToJoin.teamId == "") {
+        this.$Notice.error({
+          title: '小组号不能为0'
+        });
+        return
+      }
       //TODO
       //axios
     },

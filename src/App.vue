@@ -13,7 +13,9 @@
       <slideBarItem></slideBarItem>
       <slideBarItem></slideBarItem>
       <slideBarItem></slideBarItem>
-      <slideBarItem></slideBarItem>
+      <slideBarItem path="/login">
+        <div slot="item-text">登录</div>
+      </slideBarItem>
     </slideBar>
     <router-view></router-view>
   </div>
