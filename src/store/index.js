@@ -5,7 +5,11 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state:{
-
+    isLogin: false,
+    user: {
+      id: 0,
+      token: 0
+    }
   },
   mutations:{
 
@@ -14,7 +18,12 @@ const store = new Vuex.Store({
 
   },
   getters:{
-
+    loginState() {
+      return state.isLogin
+    },
+    getUser() {
+      return state.user
+    }
   }
 
 })

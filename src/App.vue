@@ -1,19 +1,19 @@
 <template>
   <div id="app">
     <slideBar v-if="$route.meta.showTab">
-      <slideBarItem path="/firstpage">
+      <slideBarItem name="firstpage">
        <div slot="item-text">任务</div>
       </slideBarItem>
-      <slideBarItem path="/community">
+      <slideBarItem name="community">
         <div slot="item-text">社区</div>
       </slideBarItem>
-      <slideBarItem path="/me">
+      <slideBarItem name="user">
         <div slot="item-text">我的</div>
       </slideBarItem>
       <slideBarItem></slideBarItem>
       <slideBarItem></slideBarItem>
       <slideBarItem></slideBarItem>
-      <slideBarItem path="/login">
+      <slideBarItem name="login">
         <div slot="item-text">登录</div>
       </slideBarItem>
     </slideBar>

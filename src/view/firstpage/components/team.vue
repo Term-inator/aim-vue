@@ -7,15 +7,7 @@
       </div>
       <div class="create-wrapper">
         <ul>
-          <li v-for="(item, index) in create" :key="index">
-            <router-link :to="{
-              name: 'teampage',
-              path: 'teampage/:teamId',
-              params: {
-                teamId: item.teamId
-              }
-              }">{{ item.teamName }}</router-link>
-          </li>
+          <li v-for="(item, index) in create" :key="index" @click="visitTeam(item.teamId)">{{ item.teamName }}</li>
         </ul>
       </div>
     </div>
@@ -26,15 +18,7 @@
       </div>
       <div class="join-wrapper">
         <ul>
-          <li v-for="(item, index) in join" :key="index">
-            <router-link :to="{
-              name: 'teampage',
-              path: '/teampage/:teamId',
-              params: {
-                teamId: item.teamId
-              }
-              }">{{ item.teamName }}</router-link>
-          </li>
+          <li v-for="(item, index) in join" :key="index" @click="visitTeam(item.teamId)">{{ item.teamName }}</li>
         </ul>
       </div>
     </div>
@@ -164,6 +148,9 @@ export default {
       //TODO fail or succeed
       //axios
       this.resetObject(this.buffer.teamToJoin)
+    },
+    visitTeam(teamId) {
+      this.$router.push({name: "teampage", params: {teamId: teamId}})
     },
     resetObject(obj) {
       Object.keys(obj).forEach((key) => {

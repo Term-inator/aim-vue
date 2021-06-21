@@ -22,7 +22,7 @@
       </div>
       <div v-if="reloadMember" class="member-wrapper">
         <ul>
-          <li v-for="(item, index) in member" :key="index">
+          <li v-for="(item, index) in member" :key="index" @click="visitMember(item.memberId)">
             <Row>
               <Col span="18" @click="visitMember(item.memberId)">{{ item.memberName }}</Col>
               <Col span="2" offset="2">
@@ -95,17 +95,17 @@ export default {
         newDescription: this.TeamData.description
       },
       member: [{
-          memberId: 0,
+          memberId: 1,
           memberName: "张三",
           authority: "creator"
         },
         {
-          memberId: 1,
+          memberId: 2,
           memberName: "李四",
           authority: "admin"
         },
         {
-          memberId: 2,
+          memberId: 3,
           memberName: "王五",
           authority: "member"
         }
@@ -165,7 +165,8 @@ export default {
       }
     },
     visitMember(memberId) {
-      console.log(memberId)
+      console.log(1)
+      this.$router.push({name: "user", params: {userId: memberId}})
     },
     resetObject(obj) {
       Object.keys(obj).forEach((key) => {

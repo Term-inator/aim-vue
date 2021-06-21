@@ -97,6 +97,7 @@ export default {
     },
     finish(){
       this.isFinish = !this.isFinish
+      //axios?
     },
     privacy(){
       if(this.isShow) {

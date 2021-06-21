@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 
 const firstpage = () => import('../view/firstpage/firstpage')
 const community = () => import('../view/community/community')
-const me = () => import('../view/me/me')
+const user = () => import('../view/user/user')
 const teampage = () => import('../view/teampage/teampage')
 const login = () => import('../view/login/login')
 
@@ -14,13 +14,15 @@ const routes =[
      redirect:'/firstpage'
    },
     {
-      path:'/firstpage',
+      name: 'firstpage',
+      path:'/firstpage/:userId',
       component:firstpage,
       meta:{
         showTab:true
       }
     },
   {
+    name: 'community',
     path:'/community',
     component:community,
     meta:{
@@ -28,8 +30,9 @@ const routes =[
     }
   },
   {
-    path:'/me',
-    component:me,
+    name: 'user',
+    path:'/user/:userId',
+    component:user,
     meta:{
       showTab:true
     }

@@ -188,12 +188,20 @@ export default {
       deep: true
     }
   },
+  created() {
+    //axios
+    let visiteeId = this.$route.params.userId
+    console.log(visiteeId)
+    //axios
+    //获取该user的数据
+  },
   methods: {
     addTask() {
       this.add_task = true
     },
     insertTask() {
       //TODO
+      //axios
       console.log(this.buffer.task)
     },
     deletePeriodTask(taskId) {
@@ -209,6 +217,7 @@ export default {
         }
       }
       console.log("err");
+      //axios
     },
     deleteNormalTask(taskId) {
       this.reloadNormalTask = false;
@@ -223,6 +232,7 @@ export default {
         }
       }
       console.log("err");
+      //axios
     },
   }
 }

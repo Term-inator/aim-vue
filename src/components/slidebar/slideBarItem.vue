@@ -11,16 +11,41 @@
 export default {
   name: "slideBarItem",
   props:{
-    path: String
+    name: String
+  },
+  data() {
+    return {
+      user: {
+        id: 0,
+        token: 0
+      }
+    }
   },
   computed:{
     isActive(){
-      return this.$route.path.indexOf(this.path) !== -1;
+      return this.$route.path.indexOf(this.name) !== -1;
     }
   },
   methods:{
     iClick(){
-      this.$router.replace(this.path);
+      let params = this.getParam(this.name)
+      if(params == null) {
+        this.$router.push({name: this.name});
+      }
+      else {
+        this.$router.push({name: this.name, params: this.getParam(this.name)});
+      }
+    },
+    getParam(name) {
+      if(name == "firstpage") {
+        return {userId: this.user.id}
+      }
+      else if(name == "user") {
+        return {userId: this.user.id}
+      }
+      else {
+        return null
+      }
     }
   }
 }

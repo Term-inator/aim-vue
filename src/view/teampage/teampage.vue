@@ -11,14 +11,14 @@
             <div class="title">普通任务</div>
         </div>
       </div>
-      <div class="period-task">
+      <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :TaskData="item"></task>
+          <task :TaskData="item" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
-      <div class="normal-task">
+      <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :TaskData="item"></task>
+          <task :TaskData="item" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
       <teamInfo style="float: right;" :TeamData="team"></teamInfo>
@@ -90,6 +90,8 @@ export default {
   data() {
     return {
       add_task: false,
+      reloadPeriodTask: true,
+      reloadNormalTask: true,
       user: {
           userId: 0,
           token: 0,
@@ -203,6 +205,7 @@ export default {
     }
   },
   created() {
+    //从store获取user
     this.team.teamId = this.$route.params.teamId
     //axios
     this.team = {teamId: 0, teamName: "好好学习", memberNum: 10, description: "非常好"}
@@ -216,7 +219,38 @@ export default {
     },
     insertTask() {
       //TODO
+      //axios
       console.log(this.buffer.task)
+    },
+    deletePeriodTask(taskId) {
+      this.reloadPeriodTask = false;
+      this.$nextTick(() => {
+        this.reloadPeriodTask = true;
+      })
+      
+      for(let i = 0; i < this.periodTasks.length; ++i) {
+        if(this.periodTasks[i].id == taskId) {
+          this.periodTasks.splice(i, 1);
+          return
+        }
+      }
+      console.log("err");
+      //axios
+    },
+    deleteNormalTask(taskId) {
+      this.reloadNormalTask = false;
+      this.$nextTick(() => {
+        this.reloadNormalTask = true;
+      })
+      
+      for(let i = 0; i < this.normalTasks.length; ++i) {
+        if(this.normalTasks[i].id == taskId) {
+          this.normalTasks.splice(i, 1);
+          return
+        }
+      }
+      console.log("err");
+      //axios
     },
     deleteTeam() {
         //axios
@@ -226,6 +260,7 @@ export default {
     exitTeam() {
         //axios
         //confirm
+        //back to firstpage
         console.log("exit team")
     }
   }
