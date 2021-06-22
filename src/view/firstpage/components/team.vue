@@ -7,7 +7,7 @@
       </div>
       <div class="create-wrapper">
         <ul>
-          <li v-for="(item, index) in create" :key="index" @click="visitTeam(item.teamId)">{{ item.teamName }}</li>
+          <li v-for="(item, index) in create" :key="index" @click="visitTeam(item.teamId)">{{ item.name }}</li>
         </ul>
       </div>
     </div>
@@ -18,7 +18,7 @@
       </div>
       <div class="join-wrapper">
         <ul>
-          <li v-for="(item, index) in join" :key="index" @click="visitTeam(item.teamId)">{{ item.teamName }}</li>
+          <li v-for="(item, index) in join" :key="index" @click="visitTeam(item.teamId)">{{ item.name }}</li>
         </ul>
       </div>
     </div>
@@ -32,7 +32,7 @@
       <div>
         <div style="height: 8vh; margin: 1vh 0 2vh 0; font-size: 2.2vh;">
           小组名称
-          <input type="text" style="width: 90%;" v-model="buffer.team.teamName">
+          <input type="text" style="width: 90%;" v-model="buffer.team.name">
         </div>
         <div style="font-size: 2.2vh">
           小组描述
@@ -67,7 +67,7 @@
       </Row>
       <Row v-if="buffer.teamToJoin.status == 1">
         <Col span="24">
-          <div style="font-size: 2.2vh">{{ buffer.teamToJoin.teamName }}</div>
+          <div style="font-size: 2.2vh">{{ buffer.teamToJoin.name }}</div>
         </Col>
       </Row>
       <Row v-if="buffer.teamToJoin.status == -1">
@@ -86,37 +86,37 @@ export default {
       join_team: false,
       buffer: {
         team: {
-          teamName: "",
+          name: "",
           description: ""
         },
         teamToJoin: {
           status: 0, //-1没搜到, 0没搜, 1搜到
           teamId: "",
-          teamName: ""
+          name: ""
         }
       },
       create: [
         {
           teamId: 0,
-          teamName: "小组1"
+          name: "小组1"
         },
         {
           teamId: 1,
-          teamName: "小组2"
+          name: "小组2"
         },
         {
           teamId: 3,
-          teamName: "小组3"
+          name: "小组3"
         }
       ],
       join: [
         {
           teamId: 10,
-          teamName: "小组4"
+          name: "小组4"
         },
         {
           teamId: 11,
-          teamName: "小组5"
+          name: "小组5"
         }
       ]
     }
@@ -125,15 +125,14 @@ export default {
     createTeam() {
       this.create_team = true
     },
-    insertCreate() {
-      //TODO fail or succeed
-      //axios
+    insertCreate() {//创建一个小组
       this.$axios.post(
-        '/team/addOrUpdate',this.buffer.team
+        '/team/addOrUpdate', this.buffer.team
       ).then(success => {
-        console.log(success.data)
-      },failure => {
-        console.log(failure.data)
+        this.bloggerList = success.data.data;
+        console.log(this.buffer.team)
+      }, failure => {
+        console.log(failure.data);
       })
       this.resetObject(this.buffer.team)
     },
