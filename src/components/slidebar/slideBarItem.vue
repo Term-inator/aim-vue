@@ -33,14 +33,14 @@ export default {
         this.$router.push({name: this.name});
       }
       else {
-        this.$router.push({name: this.name, params: this.getParam(this.name)});
+        this.$router.push({name: this.name, params: this.getParam()});
       }
     },
-    getParam(name) {
-      if(name == "firstpage") {
+    getParam() {
+      if(this.name == "firstpage") {
         return {userId: this.user.id}
       }
-      else if(name == "user") {
+      else if(this.name == "user") {
         return {userId: this.user.id}
       }
       else {

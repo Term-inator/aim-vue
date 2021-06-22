@@ -8,12 +8,12 @@
       </div>
       <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :TaskData="item" @deleteTask="deletePeriodTask"></task>
+          <task :editable="true" :TaskData="item" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
       <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :TaskData="item" @deleteTask="deleteNormalTask"></task>
+          <task :editable="true" :TaskData="item" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
       <team style="float: right;"></team>
@@ -190,7 +190,7 @@ export default {
   },
   created() {
     //axios
-    let visiteeId = this.$route.params.userId
+    let visiteeId = this.$route.params.id
     console.log(visiteeId)
     //axios
     //获取该user的数据

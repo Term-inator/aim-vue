@@ -5,7 +5,7 @@
         <Row>
           <Col span="20" offset="1">
             <Row>
-              <Col span="2" class-name="complete">
+              <Col v-if="editable" span="2" class-name="complete">
                 <img v-if="isFinish" @click="finish" :src="Green" alt="" />
                 <img v-else @click="finish" :src="Red" alt="" />
               </Col>
@@ -49,7 +49,7 @@
               <img src="@/assets/img/cancel.svg" alt="" style="width: 2.3vh; height: 2.3vh;" @click="cancel" />
             </Row>
 
-            <Row v-if="!isShow" type="flex" align="bottom" style="height: 16vh">
+            <Row v-if="editable && !isShow" type="flex" align="bottom" style="height: 16vh">
               <img src="@/assets/img/modify.svg" alt="" style="width: 3.5vh; height: 3.5vh;" @click="show" />
             </Row>
           </Col>
@@ -63,6 +63,10 @@
 export default {
   name: "task",
   props: {
+    editable: {
+      type: Boolean,
+      required: true
+    },
     TaskData: {
       type: Object,
       required: true

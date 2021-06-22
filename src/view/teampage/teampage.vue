@@ -13,12 +13,12 @@
       </div>
       <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :TaskData="item" @deleteTask="deletePeriodTask"></task>
+          <task :editable="true" :TaskData="item" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
       <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :TaskData="item" @deleteTask="deleteNormalTask"></task>
+          <task :editable="true" :TaskData="item" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
       <teamInfo style="float: right;" :TeamData="team"></teamInfo>
@@ -302,6 +302,7 @@ export default {
 .teampage .main .period-task {
   float: left;
   max-height: 80vh;
+  min-height: 80vh;
   width: 26vw;
   overflow-y: auto;
 }
@@ -313,6 +314,7 @@ export default {
 .teampage .main .normal-task {
   float: left;
   max-height: 80vh;
+  min-height: 80vh;
   width: 50vw;
   overflow-y: auto;
 }

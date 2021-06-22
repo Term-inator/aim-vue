@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  name: "community"
+  name: "community",
+  mounted() {
+    console.log("community")
+  }
 }
 </script>
 

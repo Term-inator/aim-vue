@@ -165,7 +165,6 @@ export default {
       }
     },
     visitMember(memberId) {
-      console.log(1)
       this.$router.push({name: "user", params: {userId: memberId}})
     },
     resetObject(obj) {
