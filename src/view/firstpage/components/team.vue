@@ -67,7 +67,7 @@
       </Row>
       <Row v-if="buffer.teamToJoin.status == 1">
         <Col span="24">
-          <div style="font-size: 2.2vh">{{ buffer.teamToJoin.name }}</div>
+          <div style="font-size: 2.2vh">小组名称: {{ buffer.teamToJoin.name }}</div>
         </Col>
       </Row>
       <Row v-if="buffer.teamToJoin.status == -1">
@@ -129,23 +129,36 @@ export default {
       this.$axios.post(
         '/team/addOrUpdate', this.buffer.team
       ).then(success => {
-        this.bloggerList = success.data.data;
-        console.log(this.buffer.team)
+        console.log(success.data.data)
       }, failure => {
         console.log(failure.data);
       })
       this.resetObject(this.buffer.team)
     },
     searchTeam() {
-      console.log(2)
       if(this.buffer.teamToJoin.teamId == "") {
         this.$Notice.error({
-          title: '小组号不能为0'
+          title: '小组号不能为空'
         });
         return
       }
-      //TODO
-      //axios
+      this.$axios.get('/team/getTeam/', {
+        params: {
+          teamId: this.buffer.teamToJoin.teamId
+        }
+      }).then(success => {
+        console.log(success)
+        this.buffer.teamToJoin.teamId = success.data.id
+        this.buffer.teamToJoin.name = success.data.name
+        this.buffer.teamToJoin.status = 1
+        if(success.data == "") {
+          this.buffer.teamToJoin.status = -1
+        }
+
+        console.log(this.buffer.teamToJoin)
+      }, failure => {
+        console.log(failure.data)
+      })
     },
     joinTeam() {
       this.join_team = true
