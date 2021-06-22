@@ -2,7 +2,7 @@
   <div id="app">
     <slideBar v-if="$route.meta.showTab">
       <slideBarItem name="firstpage">
-       <div slot="item-text">任务</div>
+        <div slot="item-text">任务</div>
       </slideBarItem>
       <slideBarItem name="community">
         <div slot="item-text">社区</div>
@@ -24,6 +24,7 @@
 <script>
 import slideBar from "@/components/slidebar/slideBar";
 import slideBarItem from "@/components/slidebar/slideBarItem";
+
 export default {
   name: 'App',
   components: {
@@ -38,9 +39,10 @@ export default {
 
 <style>
 @import "assets/css/base.css";
+
 #app {
-  height:100vh;
-  width:100%;
+  height: 100vh;
+  width: 100%;
   font-family: normal;
 }
 </style>

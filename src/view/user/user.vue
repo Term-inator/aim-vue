@@ -2,43 +2,46 @@
   <div class="user">
     <div class="main">
       <Row align="bottom">
-        <Col span="6" offset="1">
-          <div style="width: 45vh; height: 45vh; border-radius: 50%; background-color: grey"><img src="" alt=""></div>
+        <Col offset="1" span="6">
+          <div style="width: 45vh; height: 45vh; border-radius: 50%; background-color: grey"><img alt="" src=""></div>
         </Col>
-        <Col span="14" offset="2">
+        <Col offset="2" span="14">
           <Row style="height: 8vh;"></Row>
-          <Row type="flex" align="middle">
+          <Row align="middle" type="flex">
             <Col span="6" style="font-size: 4vh"><b>最近在做</b></Col>
-            <Col span="4" offset="14" style="font-size: 2vh; cursor: pointer;" @click.native="more">更多>></Col>
+            <Col offset="14" span="4" style="font-size: 2vh; cursor: pointer;" @click.native="more">更多>></Col>
           </Row>
-          <Row type="flex" align="bottom">
+          <Row align="bottom" type="flex">
             <Col v-for="(item, index) in normalTasks" :key="index" class-name="task">
-                <task v-if="partialTask(index)" :editable="false" :TaskData="item"></task>
+              <task v-if="partialTask(index)" :TaskData="item" :editable="false"></task>
             </Col>
           </Row>
         </Col>
       </Row>
-      <Row type="flex" align="middle" style="margin: 5vh 0 0 0">
-        <Col span="22" offset="2" style="font-size: 4vh;">
+      <Row align="middle" style="margin: 5vh 0 0 0" type="flex">
+        <Col offset="2" span="22" style="font-size: 4vh;">
           <input v-if="edit_name" v-model="buffer.visitee.name"/>
           <b v-else>{{ visitee.name }}</b>
-          <img v-if="edit_name" src="@/assets/img/confirm.svg" alt="" style="width: 4vh; height: 4vh;" @click="confirmEditName"/>
-          <img v-if="edit_name" src="@/assets/img/cancel.svg" alt="" style="width: 3.5vh; height: 3.5vh" @click="cancelEditName" />
-          <img v-if="!edit_name && user.id == visitee.id" src="@/assets/img/modify.svg" alt="" style="width: 4vh; height: 4vh;" @click="editName"/>
+          <img v-if="edit_name" alt="" src="@/assets/img/confirm.svg" style="width: 4vh; height: 4vh;"
+               @click="confirmEditName"/>
+          <img v-if="edit_name" alt="" src="@/assets/img/cancel.svg" style="width: 3.5vh; height: 3.5vh"
+               @click="cancelEditName"/>
+          <img v-if="!edit_name && user.id == visitee.id" alt="" src="@/assets/img/modify.svg"
+               style="width: 4vh; height: 4vh;" @click="editName"/>
         </Col>
       </Row>
       <Row>
-        <Col span="6" offset="2" style="padding: 2vh 5vw 0 0">
+        <Col offset="2" span="6" style="padding: 2vh 5vw 0 0">
           <Button long @click="followBehavior"><p v-if="reloadFollowState">{{ followState }}</p></Button>
         </Col>
         <Col span="12">
           <contribution
             :data="contribution"
-            :year="2019"
-            :rectWidth="12"
-            :rectHeight="12"
             :fontSize="10"
-            monthText="en" />
+            :rectHeight="12"
+            :rectWidth="12"
+            :year="2019"
+            monthText="en"/>
         </Col>
       </Row>
       <Row style="margin: 6vh 0 0 0">
@@ -60,6 +63,7 @@
 <script>
 import task from '@/components/task'
 import request from './components/request'
+
 export default {
   name: "user",
   components: {
@@ -88,24 +92,24 @@ export default {
       normalTasks: [
         {
           id: 0,
-          value:"这是一个任务",
-          isFinish:false,
+          value: "这是一个任务",
+          isFinish: false,
           ddl: new Date().toLocaleString(),
-          isPrivacy:true
+          isPrivacy: true
         },
         {
           id: 1,
-          value:"这是一个任务1",
-          isFinish:false,
+          value: "这是一个任务1",
+          isFinish: false,
           ddl: new Date().toLocaleString(),
-          isPrivacy:true
+          isPrivacy: true
         },
         {
           id: 2,
-          value:"这是一个任务2",
-          isFinish:false,
+          value: "这是一个任务2",
+          isFinish: false,
           ddl: new Date().toLocaleString(),
-          isPrivacy:true
+          isPrivacy: true
         }
       ],
       contribution: {
@@ -152,11 +156,10 @@ export default {
   },
   computed: {
     partialTask() {
-      return function(index) {
-        if(index < 2) {
+      return function (index) {
+        if (index < 2) {
           return true
-        }
-        else {
+        } else {
           return false
         }
       }
@@ -164,10 +167,9 @@ export default {
     followState() {
       //axios
       let follow = true
-      if(follow) {
+      if (follow) {
         return "取消关注"
-      }
-      else {
+      } else {
         return "关注"
       }
     }
@@ -204,9 +206,9 @@ export default {
         this.reloadFollowState = true;
       })
 
-      if(this.followState == "关注") {
+      if (this.followState == "关注") {
         //axios
-      }else {
+      } else {
         //axios
       }
     },
@@ -216,8 +218,8 @@ export default {
         this.reloadRequests = true;
       })
 
-      for(let i = 0; i < this.requests.length; ++i) {
-        if(this.requests[i].id == requestId) {
+      for (let i = 0; i < this.requests.length; ++i) {
+        if (this.requests[i].id == requestId) {
           this.requests.splice(i, 1);
           return
         }

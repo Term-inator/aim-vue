@@ -10,7 +10,7 @@
 <script>
 export default {
   name: "slideBarItem",
-  props:{
+  props: {
     name: String
   },
   data() {
@@ -21,29 +21,26 @@ export default {
       }
     }
   },
-  computed:{
-    isActive(){
+  computed: {
+    isActive() {
       return this.$route.path.indexOf(this.name) !== -1;
     }
   },
-  methods:{
-    iClick(){
+  methods: {
+    iClick() {
       let params = this.getParam(this.name)
-      if(params == null) {
+      if (params == null) {
         this.$router.push({name: this.name});
-      }
-      else {
+      } else {
         this.$router.push({name: this.name, params: this.getParam()});
       }
     },
     getParam() {
-      if(this.name == "firstpage") {
+      if (this.name == "firstpage") {
         return {userId: this.user.id}
-      }
-      else if(this.name == "user") {
+      } else if (this.name == "user") {
         return {userId: this.user.id}
-      }
-      else {
+      } else {
         return null
       }
     }
@@ -52,14 +49,15 @@ export default {
 </script>
 
 <style scoped>
-.slide-bar-item{
+.slide-bar-item {
   flex: 2;
   text-align: center;
   height: 8vh;
   font-size: 5vh;
   cursor: pointer;
 }
-.active{
-  font-family:siyuan;
+
+.active {
+  font-family: siyuan;
 }
 </style>

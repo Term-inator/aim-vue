@@ -4,25 +4,25 @@
       <div class="add-wrapper">
         <div>周期任务</div>
         <div>普通任务</div>
-        <img src="@/assets/img/add.svg" alt="" class="add" @click="addTask">
+        <img alt="" class="add" src="@/assets/img/add.svg" @click="addTask">
       </div>
       <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :editable="true" :TaskData="item" @deleteTask="deletePeriodTask"></task>
+          <task :TaskData="item" :editable="true" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
       <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :editable="true" :TaskData="item" @deleteTask="deleteNormalTask"></task>
+          <task :TaskData="item" :editable="true" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
       <team style="float: right;"></team>
     </div>
     <Modal
-      width="32"
-      title="添加任务"
       v-model="add_task"
       :mask-closable="false"
+      title="添加任务"
+      width="32"
       @on-ok="insertTask">
       <div>
         <div style="height: 4vh; margin: 0.5vh 0 0 0">
@@ -56,16 +56,16 @@
         </div>
         <div style="height: 8vh; margin: 1vh 0 2vh 0; font-size: 2.2vh;">
           任务名称
-          <input type="text" style="width: 90%;" v-model="buffer.task.value">
+          <input v-model="buffer.task.value" style="width: 90%;" type="text">
         </div>
         <div style="height: 8vh;">
           <Date-picker
-            type="datetime"
+            v-model="buffer.task.ddl"
             format="yyyy-MM-dd HH:mm"
-            size="large"
             placeholder="选择任务截止日期"
+            size="large"
             style="width: 90%"
-            v-model="buffer.task.ddl">
+            type="datetime">
           </Date-picker>
         </div>
       </div>

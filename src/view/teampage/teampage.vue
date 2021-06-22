@@ -3,31 +3,31 @@
     <div class="main">
       <div class="add-wrapper">
         <div class="title"><b>{{ team.teamName }}</b></div>
-        <img src="@/assets/img/add.svg" alt="" class="add" @click="addTask">
-        <img v-if="user.authority == 'creator'" src="@/assets/img/delete.svg" alt="" class="add" @click="deleteTeam" />
-        <img v-else src="@/assets/img/exit.svg" alt="" class="add" @click="exitTeam" />
+        <img alt="" class="add" src="@/assets/img/add.svg" @click="addTask">
+        <img v-if="user.authority == 'creator'" alt="" class="add" src="@/assets/img/delete.svg" @click="deleteTeam"/>
+        <img v-else alt="" class="add" src="@/assets/img/exit.svg" @click="exitTeam"/>
         <div>
-            <div class="title">周期任务</div>
-            <div class="title">普通任务</div>
+          <div class="title">周期任务</div>
+          <div class="title">普通任务</div>
         </div>
       </div>
       <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :editable="true" :TaskData="item" @deleteTask="deletePeriodTask"></task>
+          <task :TaskData="item" :editable="true" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
       <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :editable="true" :TaskData="item" @deleteTask="deleteNormalTask"></task>
+          <task :TaskData="item" :editable="true" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
-      <teamInfo style="float: right;" :TeamData="team"></teamInfo>
+      <teamInfo :TeamData="team" style="float: right;"></teamInfo>
     </div>
     <Modal
-      width="32"
-      title="添加任务"
       v-model="add_task"
       :mask-closable="false"
+      title="添加任务"
+      width="32"
       @on-ok="insertTask">
       <div>
         <div style="height: 4vh; margin: 0.5vh 0 0 0">
@@ -61,16 +61,16 @@
         </div>
         <div style="height: 8vh; margin: 1vh 0 2vh 0; font-size: 2.2vh;">
           任务名称
-          <input type="text" style="width: 90%;" v-model="buffer.task.value">
+          <input v-model="buffer.task.value" style="width: 90%;" type="text">
         </div>
         <div style="height: 8vh;">
           <Date-picker
-            type="datetime"
+            v-model="buffer.task.ddl"
             format="yyyy-MM-dd HH:mm"
-            size="large"
             placeholder="选择任务截止日期"
+            size="large"
             style="width: 90%"
-            v-model="buffer.task.ddl">
+            type="datetime">
           </Date-picker>
         </div>
       </div>
@@ -81,9 +81,10 @@
 <script>
 import task from '@/components/task'
 import teamInfo from '@/view/teampage/components/teamInfo'
+
 export default {
   name: "teampage",
-  components:{
+  components: {
     task,
     teamInfo
   },
@@ -93,9 +94,9 @@ export default {
       reloadPeriodTask: true,
       reloadNormalTask: true,
       user: {
-          userId: 0,
-          token: 0,
-          authority: "creator"
+        userId: 0,
+        token: 0,
+        authority: "creator"
       },
       buffer: {
         task: {
@@ -114,33 +115,33 @@ export default {
       periodTasks: [
         {
           id: 0,
-          value:"周期1",
-          isFinish:false,
+          value: "周期1",
+          isFinish: false,
           ddl: new Date().toLocaleString(),
-          isPrivacy:true
+          isPrivacy: true
         },
         {
           id: 1,
-          value:"周期2",
-          isFinish:false,
+          value: "周期2",
+          isFinish: false,
           ddl: new Date().toLocaleString(),
-          isPrivacy:true
+          isPrivacy: true
         }
       ],
       normalTasks: [
         {
           id: 0,
-          value:"这是一个我每天都要做的任务",
-          isFinish:false,
+          value: "这是一个我每天都要做的任务",
+          isFinish: false,
           ddl: new Date().toLocaleString(),
-          isPrivacy:true
+          isPrivacy: true
         },
         {
           id: 1,
-          value:"这是一个任务",
-          isFinish:false,
+          value: "这是一个任务",
+          isFinish: false,
           ddl: new Date().toLocaleString(),
-          isPrivacy:true
+          isPrivacy: true
         },
         {
           id: 2,
@@ -211,7 +212,7 @@ export default {
     this.team = {teamId: 0, teamName: "好好学习", memberNum: 10, description: "非常好"}
   },
   mounted() {
-      
+
   },
   methods: {
     addTask() {
@@ -227,9 +228,9 @@ export default {
       this.$nextTick(() => {
         this.reloadPeriodTask = true;
       })
-      
-      for(let i = 0; i < this.periodTasks.length; ++i) {
-        if(this.periodTasks[i].id == taskId) {
+
+      for (let i = 0; i < this.periodTasks.length; ++i) {
+        if (this.periodTasks[i].id == taskId) {
           this.periodTasks.splice(i, 1);
           return
         }
@@ -242,9 +243,9 @@ export default {
       this.$nextTick(() => {
         this.reloadNormalTask = true;
       })
-      
-      for(let i = 0; i < this.normalTasks.length; ++i) {
-        if(this.normalTasks[i].id == taskId) {
+
+      for (let i = 0; i < this.normalTasks.length; ++i) {
+        if (this.normalTasks[i].id == taskId) {
           this.normalTasks.splice(i, 1);
           return
         }
@@ -253,15 +254,15 @@ export default {
       //axios
     },
     deleteTeam() {
-        //axios
-        //confirm
-        console.log("delete team")
+      //axios
+      //confirm
+      console.log("delete team")
     },
     exitTeam() {
-        //axios
-        //confirm
-        //back to firstpage
-        console.log("exit team")
+      //axios
+      //confirm
+      //back to firstpage
+      console.log("exit team")
     }
   }
 }
@@ -269,7 +270,8 @@ export default {
 
 <style scoped>
 @import "../../assets/css/base.css";
-.teampage{
+
+.teampage {
   overflow: hidden;
 }
 
@@ -294,9 +296,9 @@ export default {
 }
 
 .teampage .main .add-wrapper .title {
-    display: inline-block;
-    margin: 0 16vw 0 2vw;
-    font-size: 3vh;
+  display: inline-block;
+  margin: 0 16vw 0 2vw;
+  font-size: 3vh;
 }
 
 .teampage .main .period-task {
@@ -308,7 +310,7 @@ export default {
 }
 
 .teampage .main .period-task::-webkit-scrollbar {
-	border-width:1px;
+  border-width: 1px;
 }
 
 .teampage .main .normal-task {
@@ -320,7 +322,7 @@ export default {
 }
 
 .teampage .main .normal-task::-webkit-scrollbar {
-	border-width:1px;
+  border-width: 1px;
 }
 
 .teampage .main .period-task .task {

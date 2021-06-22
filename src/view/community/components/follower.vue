@@ -76,7 +76,7 @@ ul, li {
   height: 100vh;
   padding: 1vh 0 0 0;
   border-left: 0.5px solid white;
-  box-shadow: 0 2px 5px rgba(0,0,0,.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
 }
 
 .follower .interest {
@@ -90,7 +90,7 @@ ul, li {
 }
 
 .follower .interest .interest-wrapper::-webkit-scrollbar {
-  border-width:1px;
+  border-width: 1px;
 }
 
 .follower .follow {
@@ -104,14 +104,14 @@ ul, li {
 }
 
 .follower .follow .follow-wrapper::-webkit-scrollbar {
-  border-width:1px;
+  border-width: 1px;
 }
 
 .follower .interest .title, .follower .follow .title {
   height: 6vh;
   font-size: 3.5vh;
   font-weight: bold;
-  border-bottom: 1px solid rgba(0,0,0,.4);
+  border-bottom: 1px solid rgba(0, 0, 0, .4);
 }
 
 .follower .interest li, .follower .follow li {
@@ -122,7 +122,7 @@ ul, li {
   padding: 0.5vh 0 0 1vw;
   font-size: 2.8vh;
   border-top: 0.5px solid white;
-  box-shadow: 0 1px 2px rgba(0,0,0,.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
   cursor: pointer;
 }
 

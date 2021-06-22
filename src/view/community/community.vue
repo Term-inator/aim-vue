@@ -4,8 +4,8 @@
       <Row>
         <Col span="18">
           <Row style="padding: 2vh 0 0 0">
-            <Col span="2" offset="22">
-              <img src="@/assets/img/add.svg" alt="" style="width: 4vh; height: 4vh" @click="propagate"/>
+            <Col offset="22" span="2">
+              <img alt="" src="@/assets/img/add.svg" style="width: 4vh; height: 4vh" @click="propagate"/>
             </Col>
           </Row>
           <Row>
@@ -22,15 +22,16 @@
       </Row>
     </div>
     <Modal
-      width="32"
-      title="发布"
       v-model="is_propagate"
       :mask-closable="false"
-      ok-text="发布"
       cancel-text="取消"
+      ok-text="发布"
+      title="发布"
+      width="32"
       @on-ok="insertPost"
       @on-cancel="resetObject(buffer.post)">
-      <textarea v-model="buffer.post.title" style="width: 100%; height: 30vh; font-size: 3vh" placeholder="不超过35字"></textarea>
+      <textarea v-model="buffer.post.title" placeholder="不超过35字"
+                style="width: 100%; height: 30vh; font-size: 3vh"></textarea>
     </Modal>
   </div>
 </template>
@@ -38,6 +39,7 @@
 <script>
 import post from './components/post'
 import follower from "./components/follower";
+
 export default {
   name: "community",
   components: {

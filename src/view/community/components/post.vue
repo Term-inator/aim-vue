@@ -3,7 +3,7 @@
     <div class="post-double">
       <div class="post-content">
         <Row>
-          <Col span="20" offset="1">
+          <Col offset="1" span="20">
             <Row style="font-size: 2vh;">
               来自: {{ posterName }}
             </Row>
@@ -13,14 +13,14 @@
               </Col>
             </Row>
             <Row>
-              <Col span="18" offset="2">
+              <Col offset="2" span="18">
                 <span style="font-size: 1.8vh;"> {{ created_at }} </span>
               </Col>
             </Row>
           </Col>
           <Col span="2">
-            <Row type="flex" align="bottom" style="height: 26vh">
-              <img src="@/assets/img/add.svg" alt="" style="width: 3vh; height: 3vh;" @click="follow" />
+            <Row align="bottom" style="height: 26vh" type="flex">
+              <img alt="" src="@/assets/img/add.svg" style="width: 3vh; height: 3vh;" @click="follow"/>
             </Row>
           </Col>
         </Row>
@@ -38,8 +38,8 @@ export default {
       required: true
     }
   },
-  data(){
-    return{
+  data() {
+    return {
       id: this.PostData.id,
       poster: this.PostData.poster,
       posterName: this.PostData.posterName,
@@ -47,7 +47,7 @@ export default {
       created_at: this.PostData.created_at,
     }
   },
-  methods:{
+  methods: {
     follow() {
       //axios
       console.log("follow")
@@ -57,26 +57,26 @@ export default {
 </script>
 
 <style scoped>
-.post{
+.post {
   display: inline-block;
   position: relative;
   display: flex;
   margin: 1vh 0 0 0;
-  align-content:space-between;
+  align-content: space-between;
   background: white;
 }
 
-.post-double{
+.post-double {
   display: flex;
   justify-content: center;
 }
 
-.post-double .post-content{
+.post-double .post-content {
   height: 30vh;
   width: 22vw;
   padding: 1vh 0vw 1vh 0vw;
   border: 0.5px solid white;
-  box-shadow: 0 2px 5px rgba(0,0,0,.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
   white-space: nowrap;
 }
 </style>

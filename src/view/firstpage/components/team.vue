@@ -3,7 +3,7 @@
     <div class="create">
       <div class="title">
         你创建的小组
-        <img src="@/assets/img/add.svg" alt="" class="create-team" @click="createTeam" />
+        <img alt="" class="create-team" src="@/assets/img/add.svg" @click="createTeam"/>
       </div>
       <div class="create-wrapper">
         <ul>
@@ -14,7 +14,7 @@
     <div class="join">
       <div class="title">
         你加入的小组
-        <img src="@/assets/img/add.svg" alt="" class="join-team" @click="joinTeam"/>
+        <img alt="" class="join-team" src="@/assets/img/add.svg" @click="joinTeam"/>
       </div>
       <div class="join-wrapper">
         <ul>
@@ -23,47 +23,51 @@
       </div>
     </div>
     <Modal
-      width="32"
-      title="创建小组"
       v-model="create_team"
       :mask-closable="false"
+      title="创建小组"
+      width="32"
       @on-ok="insertCreate"
       @on-cancel="resetObject(buffer.team)">
       <div>
         <div style="height: 8vh; margin: 1vh 0 2vh 0; font-size: 2.2vh;">
           小组名称
-          <input type="text" style="width: 90%;" v-model="buffer.team.name">
+          <input v-model="buffer.team.name" style="width: 90%;" type="text">
         </div>
         <div style="font-size: 2.2vh">
           小组描述
-          <textarea rows="3" style="width: 90%;" placeholder="可不填" v-model="buffer.team.description"></textarea>
+          <textarea v-model="buffer.team.description" placeholder="可不填" rows="3" style="width: 90%;"></textarea>
         </div>
       </div>
     </Modal>
     <Modal
-      width="32"
-      title="加入小组"
       v-model="join_team"
       :mask-closable="false"
-      ok-text="加入"
       cancel-text="取消"
+      ok-text="加入"
+      title="加入小组"
+      width="32"
       @on-ok="insertJoin"
       @on-cancel="resetObject(buffer.teamToJoin)">
       <Row>
-        <Col span="3"><div style="font-size: 2.2vh;">小组号</div></Col>
+        <Col span="3">
+          <div style="font-size: 2.2vh;">小组号</div>
+        </Col>
         <Col span="19">
           <div style="height: 8vh; font-size: 2.2vh;">
-            <input type="text" style="width: 96%;" v-model="buffer.teamToJoin.teamId">
+            <input v-model="buffer.teamToJoin.teamId" style="width: 96%;" type="text">
           </div>
         </Col>
         <Col span="2">
-          <img src="@/assets/img/firstpage/search.svg" alt=""
-            style="width: 4vh; height: 4vh; cursor: pointer;"
-            @click="searchTeam"/>
+          <img alt="" src="@/assets/img/firstpage/search.svg"
+               style="width: 4vh; height: 4vh; cursor: pointer;"
+               @click="searchTeam"/>
         </Col>
       </Row>
       <Row v-if="buffer.teamToJoin.status == 1">
-        <Col><div style="font-size: 2.2vh">搜索结果</div></Col>
+        <Col>
+          <div style="font-size: 2.2vh">搜索结果</div>
+        </Col>
       </Row>
       <Row v-if="buffer.teamToJoin.status == 1">
         <Col span="24">
@@ -134,7 +138,6 @@ export default {
           description: this.buffer.team.description
         }
       ).then(success => {
-
         console.log(success.data.data)
       }, failure => {
         console.log(failure.data);
@@ -142,7 +145,7 @@ export default {
       this.resetObject(this.buffer.team)
     },
     searchTeam() {
-      if(this.buffer.teamToJoin.teamId == "") {
+      if (this.buffer.teamToJoin.teamId == "") {
         this.$Notice.error({
           title: '小组号不能为空'
         });
@@ -157,7 +160,7 @@ export default {
         this.buffer.teamToJoin.teamId = success.data.id
         this.buffer.teamToJoin.name = success.data.name
         this.buffer.teamToJoin.status = 1
-        if(success.data == "") {
+        if (success.data == "") {
           this.buffer.teamToJoin.status = -1
         }
 
@@ -170,8 +173,18 @@ export default {
       this.join_team = true
     },
     insertJoin() {
-      //TODO fail or succeed
-      //axios
+      this.$axios.post(
+        '/team/joinTeam',
+        {
+          userId: localStorage.getItem("userId"),
+          teamId: this.buffer.teamToJoin.teamId
+        }
+      ).then(success => {
+        console.log(success.data.data)
+      }, failure => {
+        console.log(failure.data);
+      })
+
       this.resetObject(this.buffer.teamToJoin)
     },
     visitTeam(teamId) {
@@ -200,7 +213,7 @@ ul, li {
   height: 100vh;
   padding: 9vh 0 0 0;
   border-left: 0.5px solid white;
-  box-shadow: 0 2px 5px rgba(0,0,0,.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
 }
 
 .team .create {
@@ -214,7 +227,7 @@ ul, li {
 }
 
 .team .create .create-wrapper::-webkit-scrollbar {
-	border-width:1px;
+  border-width: 1px;
 }
 
 .team .join {
@@ -228,14 +241,14 @@ ul, li {
 }
 
 .team .join .join-wrapper::-webkit-scrollbar {
-	border-width:1px;
+  border-width: 1px;
 }
 
 .team .create .title, .team .join .title {
   height: 6vh;
   font-size: 3.5vh;
   font-weight: bold;
-  border-bottom: 1px solid rgba(0,0,0,.4);
+  border-bottom: 1px solid rgba(0, 0, 0, .4);
 }
 
 .team .create .create-team, .team .join .join-team {
@@ -254,7 +267,7 @@ ul, li {
   padding: 0.5vh 0 0 1vw;
   font-size: 2.8vh;
   border-top: 0.5px solid white;
-  box-shadow: 0 1px 2px rgba(0,0,0,.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
   cursor: pointer;
 }
 
