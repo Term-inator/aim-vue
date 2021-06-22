@@ -9,10 +9,6 @@ const login = () => import('../view/login/login')
 
 Vue.use(VueRouter)
 const routes =[
-   {
-     path:'',
-     redirect:'/firstpage'
-   },
     {
       name: 'firstpage',
       path:'/firstpage/:userId',

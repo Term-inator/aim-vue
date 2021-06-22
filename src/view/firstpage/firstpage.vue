@@ -190,7 +190,7 @@ export default {
   },
   created() {
     //axios
-    let visiteeId = this.$route.params.id
+    let visiteeId = this.$route.params.userId
     console.log(visiteeId)
     //axios
     //获取该user的数据
