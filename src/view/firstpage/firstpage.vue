@@ -27,19 +27,19 @@
       <div>
         <div style="height: 4vh; margin: 0.5vh 0 0 0">
           <Radio-group v-model="buffer.task.TaskType">
-            <Radio label="once" size="large">
+            <Radio label="ONCE" size="large">
               <span>单次</span>
             </Radio>
-            <Radio label="daily" size="large">
+            <Radio label="DAILY" size="large">
               <span>每天</span>
             </Radio>
-            <Radio lable="weekly" size="large">
+            <Radio lable="WEEKLY" size="large">
               <span>每周</span>
             </Radio>
-            <Radio lable="monthly" size="large">
+            <Radio lable="MONTHLY" size="large">
               <span>每月</span>
             </Radio>
-            <Radio lable="yearly" size="large">
+            <Radio lable="YEARLY" size="large">
               <span>每年</span>
             </Radio>
           </Radio-group>
@@ -76,9 +76,10 @@
 <script>
 import task from '@/components/task'
 import team from '@/view/firstpage/components/team'
+
 export default {
   name: "firstpage",
-  components:{
+  components: {
     task,
     team
   },
@@ -91,91 +92,12 @@ export default {
         task: {
           value: "",
           ddl: "",
-          TaskType: "normal",
+          TaskType: "WEEKLY",
           privacyType: "public"
         }
       },
-      periodTasks: [
-        {
-          id: 0,
-          value:"周期1",
-          isFinish:false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy:true
-        },
-        {
-          id: 1,
-          value:"周期2",
-          isFinish:false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy:true
-        }
-      ],
-      normalTasks: [
-        {
-          id: 0,
-          value:"这是一个我每天都要做的任务",
-          isFinish:false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy:true
-        },
-        {
-          id: 1,
-          value:"这是一个任务",
-          isFinish:false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy:true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        }
-      ]
+      periodTasks: [],
+      normalTasks: []
     }
   },
   watch: {
@@ -189,29 +111,63 @@ export default {
     }
   },
   created() {
-    //axios
     let visiteeId = this.$route.params.userId
     console.log(visiteeId)
-    //axios
-    //获取该user的数据
+    this.$axios.get(
+      '/task/personalPeriodicTasks',
+      {
+        params: {
+          userId: parseInt(visiteeId)
+        }
+      }).then(success => {
+      this.periodTasks = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data)
+    })
+
+    this.$axios.get(
+      '/task/personalOnceTasks',
+      {
+        params: {
+          userId: parseInt(visiteeId)
+        }
+      }).then(success => {
+      this.normalTasks = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data)
+    })
   },
   methods: {
     addTask() {
       this.add_task = true
     },
     insertTask() {
-      //TODO
-      //axios
+      this.$axios.post('/task/addPersonalTask',
+        {
+          period: this.buffer.task.TaskType,
+          teamTaskId: -1,
+          name: this.buffer.task.value,
+          isPrivate: (this.buffer.task.privacyType == "public") ? false : true,
+          deadline: this.dateFormat("YYYY-mm-ddTHH:MM", this.buffer.task.ddl),
+          userId: localStorage.getItem("userId")
+        }).then(success => {
+        console.log(success.data)
+      }, failure => {
+        console.log(failure.data)
+      })
       console.log(this.buffer.task)
+      this.resetObject(this.buffer.task)
     },
     deletePeriodTask(taskId) {
       this.reloadPeriodTask = false;
       this.$nextTick(() => {
         this.reloadPeriodTask = true;
       })
-      
-      for(let i = 0; i < this.periodTasks.length; ++i) {
-        if(this.periodTasks[i].id == taskId) {
+
+      for (let i = 0; i < this.periodTasks.length; ++i) {
+        if (this.periodTasks[i].id == taskId) {
           this.periodTasks.splice(i, 1);
           return
         }
@@ -224,9 +180,9 @@ export default {
       this.$nextTick(() => {
         this.reloadNormalTask = true;
       })
-      
-      for(let i = 0; i < this.normalTasks.length; ++i) {
-        if(this.normalTasks[i].id == taskId) {
+
+      for (let i = 0; i < this.normalTasks.length; ++i) {
+        if (this.normalTasks[i].id == taskId) {
           this.normalTasks.splice(i, 1);
           return
         }
@@ -234,13 +190,38 @@ export default {
       console.log("err");
       //axios
     },
+    dateFormat(fmt, date) {
+      let ret;
+      const opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+      };
+      for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+          fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        }
+      }
+      return fmt;
+    },
+    resetObject(obj) {
+      Object.keys(obj).forEach((key) => {
+        obj[key] = ""
+      })
+    },
   }
 }
 </script>
 
 <style scoped>
 @import "../../assets/css/base.css";
-.firstpage{
+
+.firstpage {
   overflow: hidden;
 }
 
@@ -279,7 +260,7 @@ export default {
 }
 
 .firstpage .main .period-task::-webkit-scrollbar {
-	border-width:1px;
+  border-width: 1px;
 }
 
 .firstpage .main .normal-task {
@@ -291,7 +272,7 @@ export default {
 }
 
 .firstpage .main .normal-task::-webkit-scrollbar {
-	border-width:1px;
+  border-width: 1px;
 }
 
 .firstpage .main .period-task .task {

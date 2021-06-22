@@ -39,7 +39,10 @@
               <div v-if="isPrivacy">公开</div>
               <div v-else>私密</div>
             </Row>
-            <Row v-if="isShow" type="flex" align="bottom" style="height: 10vh">
+            <Row>
+              {{ parsePeriod }}
+            </Row>
+            <Row v-if="isShow" type="flex" align="bottom" style="height: 7vh">
               <img src="@/assets/img/delete.svg" alt="" style="width: 3.4vh; height: 3.4vh;" @click="del" />
             </Row>
             <Row v-if="isShow">
@@ -49,7 +52,7 @@
               <img src="@/assets/img/cancel.svg" alt="" style="width: 2.3vh; height: 2.3vh;" @click="cancel" />
             </Row>
 
-            <Row v-if="editable && !isShow" type="flex" align="bottom" style="height: 15vh">
+            <Row v-if="editable && !isShow" type="flex" align="bottom" style="height: 13vh">
               <img src="@/assets/img/modify.svg" alt="" style="width: 3.5vh; height: 3.5vh;" @click="show" />
             </Row>
           </Col>
@@ -75,13 +78,14 @@ export default {
   data(){
     return{
       id: this.TaskData.id,
-      value: this.TaskData.value,
+      value: this.TaskData.name,
       isShow:false,
       isFinish:false,
       Red:require('@/assets/img/task/red.svg'),
       Green:require('@/assets/img/task/green.svg'),
-      ddl: this.TaskData.ddl,
-      isPrivacy: true,
+      period: this.TaskData.period,
+      ddl: this.TaskData.deadline.substring(0, 10) + " " + this.TaskData.deadline.substring(11, 16),
+      isPrivacy: this.TaskData.isPrivacy,
 
       newValue: "",
       newDdl: "",
@@ -95,6 +99,28 @@ export default {
       this.oldIsPrivacy = this.isPrivacy
     }
   },
+  computed: {
+    parsePeriod: function() {
+        if(this.period == "once") {
+          return ""
+        }
+        else if(this.period == "daily") {
+          return "每天"
+        }
+        else if(this.period == "weekly") {
+          return "每周"
+        }
+        else if(this.period == "monthly") {
+          return "每月"
+        }
+        else if(this.period == "yearly") {
+          return "每年"
+        }
+        else {
+          return ""
+        }
+      }
+    },
   methods:{
     show(){
       this.isShow = !this.isShow
