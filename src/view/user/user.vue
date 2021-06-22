@@ -29,7 +29,7 @@
       </Row>
       <Row>
         <Col span="6" offset="2" style="padding: 2vh 5vw 0 0">
-          <Button long @click="followBehavior">{{ followState }}</Button>
+          <Button long @click="followBehavior"><p v-if="reloadFollowState">{{ followState }}</p></Button>
         </Col>
         <Col span="12">
           <contribution
@@ -70,6 +70,7 @@ export default {
     return {
       edit_name: false,
       reloadRequests: true,
+      reloadFollowState: true,
       buffer: {
         visitee: {
           id: "",
@@ -198,6 +199,11 @@ export default {
       this.buffer.visitee.name = this.visitee.name
     },
     followBehavior() {
+      this.reloadFollowState = false;
+      this.$nextTick(() => {
+        this.reloadFollowState = true;
+      })
+
       if(this.followState == "关注") {
         //axios
       }else {

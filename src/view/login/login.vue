@@ -67,7 +67,18 @@ export default {
       this.is_register = !this.is_register
     },
     confirm() {
-      //axios
+      //注册
+      this.$axios.post(
+        '/user/addOrUpdate',
+        {
+          name: this.user.name,
+          password: this.user.password
+        }).then(success => {
+          console.log(this.user.name)
+          console.log(success.data)
+        }, failure => {
+          console.log(failure.data)
+        })
       this.register()
     },
     resetObject(obj) {
