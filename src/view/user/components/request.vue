@@ -5,13 +5,13 @@
         <Row>
           <Col span="20" offset="1">
             <Row style="height: 10vh; margin: 3vh 0 0 0">
-              <Col offset="2" class-name="value" span="18">
-                <div>{{ value }}</div>
+              <Col offset="2" span="18">
+                <div style="font-size: 3.5vh; white-space: pre-wrap;">{{ value }}</div>
               </Col>
             </Row>
             <Row>
               <Col span="18" offset="2">
-                <span> {{ time }} </span>
+                <span style="font-size: 1.8vh;"> {{ time }} </span>
               </Col>
             </Row>
           </Col>
@@ -42,7 +42,7 @@ export default {
     return{
       id: this.RequestData.id,
       value: this.RequestData.value,
-      time: this.RequestData.time, //TODO set dll
+      time: this.RequestData.time,
     }
   },
   methods:{
@@ -86,20 +86,5 @@ export default {
   border: 0.5px solid white;
   box-shadow: 0 2px 5px rgba(0,0,0,.5);
   white-space: nowrap;
-}
-
-.request-content .value {
-  width: flex;
-  height: 12vh;
-  font-size: 3.5vh;
-  white-space: pre-wrap;
-}
-
-.request-content .complete-time{
-  font-size: 1.8vh;
-}
-
-.request-content .privacy{
-  font-size: 2vh;
 }
 </style>

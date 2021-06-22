@@ -45,7 +45,7 @@
       v-model="change_level"
       :mask-closable="false"
       @on-ok="updateLevel"
-      @on-cancel="reset(buffer.member)">
+      @on-cancel="resetObject(buffer.member)">
       <Radio-group v-model="buffer.member.authority">
         <Radio v-if="user.authority == 'creator'" label="creator" size="large">
           <span>创建者</span>

@@ -29,7 +29,7 @@
       </Row>
       <Row>
         <Col span="6" offset="2" style="padding: 2vh 5vw 0 0">
-          <Button long="true" @click="folloBehavior">{{ followState }}</Button>
+          <Button long @click="followBehavior">{{ followState }}</Button>
         </Col>
         <Col span="12">
           <contribution
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       edit_name: false,
-      reloadRequests: false,
+      reloadRequests: true,
       buffer: {
         visitee: {
           id: "",
@@ -209,7 +209,7 @@ export default {
       this.$nextTick(() => {
         this.reloadRequests = true;
       })
-      
+
       for(let i = 0; i < this.requests.length; ++i) {
         if(this.requests[i].id == requestId) {
           this.requests.splice(i, 1);

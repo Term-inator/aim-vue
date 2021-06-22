@@ -28,7 +28,7 @@
       v-model="create_team"
       :mask-closable="false"
       @on-ok="insertCreate"
-      @on-cancel="reset(buffer.team)">
+      @on-cancel="resetObject(buffer.team)">
       <div>
         <div style="height: 8vh; margin: 1vh 0 2vh 0; font-size: 2.2vh;">
           小组名称
@@ -48,7 +48,7 @@
       ok-text="加入"
       cancel-text="取消"
       @on-ok="insertJoin"
-      @on-cancel="reset(buffer.teamToJoin)">
+      @on-cancel="resetObject(buffer.teamToJoin)">
       <Row>
         <Col span="3"><div style="font-size: 2.2vh;">小组号</div></Col>
         <Col span="19">
