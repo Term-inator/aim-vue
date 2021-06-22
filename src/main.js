@@ -13,6 +13,7 @@ Vue.use(contribution);
 
 Vue.config.productionTip = false
 
+axios.defaults.baseURL = "192.168.1.113:8080"
 Vue.prototype.$axios = axios
 
 new Vue({

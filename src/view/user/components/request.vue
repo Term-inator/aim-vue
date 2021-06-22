@@ -4,23 +4,23 @@
       <div class="request-content">
         <Row>
           <Col span="20" offset="1">
-            <Row style="height: 10vh">
+            <Row style="height: 10vh; margin: 3vh 0 0 0">
               <Col offset="2" class-name="value" span="18">
                 <div>{{ value }}</div>
               </Col>
             </Row>
             <Row>
               <Col span="18" offset="2">
-                <span> {{ ddl }} </span>
+                <span> {{ time }} </span>
               </Col>
             </Row>
           </Col>
           <Col span="2">
-            <Row>
+            <Row type="flex" align="bottom" style="height: 14vh">
               <img src="@/assets/img/confirm.svg" alt="" style="width: 2.5vh; height: 2.5vh;" @click="confirm" />
             </Row>
             <Row>
-              <img src="@/assets/img/cancel.svg" alt="" style="width: 2.3vh; height: 2.3vh;" @click="cancel" />
+              <img src="@/assets/img/cancel.svg" alt="" style="width: 2.3vh; height: 2.3vh; margin: 1vh 0 0 0" @click="cancel" />
             </Row>
           </Col>
         </Row>
@@ -32,53 +32,33 @@
 <script>
 export default {
   name: "request",
-  data(){
-    return{
-      id: this.TaskData.id,
-      value: this.TaskData.value,
-      isShow:false,
-      isFinish:false,
-      ddl: this.TaskData.ddl, //TODO set dll
-      isPrivacy: true,
-
-      newValue: "",
-      newDdl: "",
-      oldIsPrivacy: ""
+  props: {
+    RequestData: {
+      type: Object,
+      required: true
     }
   },
-  watch:{
-    isShow(){
-      this.newValue = this.value
-      this.newDdl = this.ddl
-      this.oldIsPrivacy = this.isPrivacy
+  data(){
+    return{
+      id: this.RequestData.id,
+      value: this.RequestData.value,
+      time: this.RequestData.time, //TODO set dll
     }
   },
   methods:{
-    show(){
-      this.isShow = !this.isShow
-    },
-    finish(){
-      this.isFinish = !this.isFinish
-      //axios?
-    },
-    privacy(){
-      if(this.isShow) {
-        this.isPrivacy = !this.isPrivacy
-      }
-    },
     confirm() {
-      this.show()
-      this.value = this.newValue
-      this.ddl = new Date(this.newDdl).toLocaleString()
+      //同意
       //axios
+      this.del()
     },
     cancel() {
-      this.show()
-      this.isPrivacy = this.oldIsPrivacy
+      //拒绝
+      //axios
+      this.del()
     },
     del() {
       console.log(this.id)
-      this.$emit("deleteTask", this.id)
+      this.$emit("deleteRequest", this.id)
     }
   }
 }

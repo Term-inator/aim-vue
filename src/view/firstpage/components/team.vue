@@ -128,6 +128,13 @@ export default {
     insertCreate() {
       //TODO fail or succeed
       //axios
+      this.$axios.post(
+        '/team/addOrUpdate',this.buffer.team
+      ).then(success => {
+        console.log(success.data)
+      },failure => {
+        console.log(failure.data)
+      })
       this.resetObject(this.buffer.team)
     },
     searchTeam() {

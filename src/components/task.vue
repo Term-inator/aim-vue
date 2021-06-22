@@ -119,7 +119,6 @@ export default {
       this.isPrivacy = this.oldIsPrivacy
     },
     del() {
-      console.log(this.id)
       this.$emit("deleteTask", this.id)
     }
   }

@@ -28,7 +28,10 @@
         </Col>
       </Row>
       <Row>
-        <Col offset="8">
+        <Col span="6" offset="2" style="padding: 2vh 5vw 0 0">
+          <Button long="true" @click="folloBehavior">{{ followState }}</Button>
+        </Col>
+        <Col span="12">
           <contribution
             :data="contribution"
             :year="2019"
@@ -44,8 +47,10 @@
         </Col>
       </Row>
       <Row>
-        <Col>
-        <request></request>
+        <Col v-if="reloadRequests" offset="3">
+          <div v-for="(item, index) in requests" :key="index" style="display: inline-block; margin: 0 4vw 4vh 0">
+            <request :RequestData="item" @deleteRequest="deleteRequest"></request>
+          </div>
         </Col>
       </Row>
     </div>
@@ -64,6 +69,7 @@ export default {
   data() {
     return {
       edit_name: false,
+      reloadRequests: false,
       buffer: {
         visitee: {
           id: "",
@@ -121,7 +127,24 @@ export default {
       },
       requests: [
         {
-
+          id: 0,
+          value: "球球了",
+          time: 0
+        },
+        {
+          id: 1,
+          value: "球球了1",
+          time: 0
+        },
+        {
+          id: 2,
+          value: "球球了2",
+          time: 0
+        },
+        {
+          id: 3,
+          value: "球球了3",
+          time: 0
         }
       ]
     }
@@ -135,6 +158,16 @@ export default {
         else {
           return false
         }
+      }
+    },
+    followState() {
+      //axios
+      let follow = true
+      if(follow) {
+        return "取消关注"
+      }
+      else {
+        return "关注"
       }
     }
   },
@@ -163,15 +196,37 @@ export default {
     cancelEditName() {
       this.edit_name = false
       this.buffer.visitee.name = this.visitee.name
-    }
+    },
+    followBehavior() {
+      if(this.followState == "关注") {
+        //axios
+      }else {
+        //axios
+      }
+    },
+    deleteRequest(requestId) {
+      this.reloadRequests = false;
+      this.$nextTick(() => {
+        this.reloadRequests = true;
+      })
+      
+      for(let i = 0; i < this.requests.length; ++i) {
+        if(this.requests[i].id == requestId) {
+          this.requests.splice(i, 1);
+          return
+        }
+      }
+      console.log("err");
+      //axios
+    },
   }
 }
 </script>
 
 <style scoped>
 .user .main {
-  height: 88vh;
-  padding: 14vh 0 0 0;
+  min-height: 88vh;
+  padding: 14vh 0 10vh 0;
 }
 
 .user .main .task {
