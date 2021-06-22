@@ -16,7 +16,7 @@
           <task :TaskData="item" :editable="true" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
-      <team style="float: right;"></team>
+      <team style="float: right;" :VisiteeId="getVisiteeId"></team>
     </div>
     <Modal
       v-model="add_task"
@@ -27,19 +27,19 @@
       <div>
         <div style="height: 4vh; margin: 0.5vh 0 0 0">
           <Radio-group v-model="buffer.task.TaskType">
-            <Radio label="ONCE" size="large">
+            <Radio label="once" size="large">
               <span>单次</span>
             </Radio>
-            <Radio label="DAILY" size="large">
+            <Radio label="daily" size="large">
               <span>每天</span>
             </Radio>
-            <Radio lable="WEEKLY" size="large">
+            <Radio lable="weekly" size="large">
               <span>每周</span>
             </Radio>
-            <Radio lable="MONTHLY" size="large">
+            <Radio lable="monthly" size="large">
               <span>每月</span>
             </Radio>
-            <Radio lable="YEARLY" size="large">
+            <Radio lable="yearly" size="large">
               <span>每年</span>
             </Radio>
           </Radio-group>
@@ -92,7 +92,7 @@ export default {
         task: {
           value: "",
           ddl: "",
-          TaskType: "WEEKLY",
+          TaskType: "once",
           privacyType: "public"
         }
       },
@@ -108,6 +108,11 @@ export default {
         }
       },
       deep: true
+    }
+  },
+  computed: {
+    getVisiteeId: function () {
+      return this.$route.params.userId
     }
   },
   created() {
@@ -159,6 +164,15 @@ export default {
       })
       console.log(this.buffer.task)
       this.resetObject(this.buffer.task)
+
+      this.reloadPeriodTask = false;
+      this.$nextTick(() => {
+        this.reloadPeriodTask = true;
+      })
+      this.reloadNormalTask = false;
+      this.$nextTick(() => {
+        this.reloadNormalTask = true;
+      })
     },
     deletePeriodTask(taskId) {
       this.reloadPeriodTask = false;

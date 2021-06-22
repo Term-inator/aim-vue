@@ -7,7 +7,7 @@
       </div>
       <div class="create-wrapper">
         <ul>
-          <li v-for="(item, index) in create" :key="index" @click="visitTeam(item.teamId)">{{ item.name }}</li>
+          <li v-for="(item, index) in create" :key="index" @click="visitTeam(item.id)">{{ item.name }}</li>
         </ul>
       </div>
     </div>
@@ -18,7 +18,7 @@
       </div>
       <div class="join-wrapper">
         <ul>
-          <li v-for="(item, index) in join" :key="index" @click="visitTeam(item.teamId)">{{ item.name }}</li>
+          <li v-for="(item, index) in join" :key="index" @click="visitTeam(item.id)">{{ item.name }}</li>
         </ul>
       </div>
     </div>
@@ -84,6 +84,12 @@
 <script>
 export default {
   name: "team",
+  props: {
+    VisiteeId: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       create_team: false,
@@ -99,31 +105,40 @@ export default {
           name: ""
         }
       },
-      create: [
-        {
-          teamId: 0,
-          name: "小组1"
-        },
-        {
-          teamId: 1,
-          name: "小组2"
-        },
-        {
-          teamId: 3,
-          name: "小组3"
-        }
-      ],
-      join: [
-        {
-          teamId: 10,
-          name: "小组4"
-        },
-        {
-          teamId: 11,
-          name: "小组5"
-        }
-      ]
+      create: [],
+      join: []
     }
+  },
+  created() {
+    //我创建
+    this.$axios.get(
+      '/user/getCreateTeams',
+      {
+        params:{
+          userId: this.VisiteeId
+        }
+      }
+    ).then(success => {
+      this.create = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data);
+    })
+
+    //我加入
+    this.$axios.get(
+      '/user/getJoinTeams',
+      {
+        params:{
+          userId: this.VisiteeId
+        }
+      }
+    ).then(success => {
+      this.join = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data);
+    })
   },
   methods: {
     createTeam() {
@@ -138,7 +153,7 @@ export default {
           description: this.buffer.team.description
         }
       ).then(success => {
-        console.log(success.data.data)
+        console.log(success.data)
       }, failure => {
         console.log(failure.data);
       })
@@ -180,7 +195,16 @@ export default {
           teamId: this.buffer.teamToJoin.teamId
         }
       ).then(success => {
-        console.log(success.data.data)
+        if(success.data) {
+          this.$Notice.success({
+            title: '加入成功',
+          })
+        }
+        else {
+          this.$Notice.error({
+            title: '已是该小组成员',
+          })
+        }
       }, failure => {
         console.log(failure.data);
       })

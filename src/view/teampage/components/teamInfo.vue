@@ -25,7 +25,7 @@
         <ul>
           <li v-for="(item, index) in member" :key="index" @click="visitMember(item.memberId)">
             <Row>
-              <Col span="18" @click="visitMember(item.memberId)">{{ item.memberName }}</Col>
+              <Col span="18" @click="visitMember(item.memberId)">{{ item.username }}</Col>
               <Col offset="2" span="2">
                 <img v-if="user.authority != 'member' && user.id != item.memberId"
                      alt="" src="@/assets/img/teamInfo/kick_out.svg" style="width: 4.2vh; height: 4.2vh"
@@ -100,32 +100,24 @@ export default {
 
         newDescription: this.TeamData.description
       },
-      member: [{
-        memberId: 1,
-        memberName: "张三",
-        authority: "creator"
-      },
-        {
-          memberId: 2,
-          memberName: "李四",
-          authority: "admin"
-        },
-        {
-          memberId: 3,
-          memberName: "王五",
-          authority: "member"
-        }
-      ]
+      member: []
     }
   },
   created() {
-    this.getTeam();
+    this.$axios.get(
+      '/team/getAllUsers',
+      {
+        params: {
+          teamId: this.team.teamId
+        }
+      }).then(success => {
+      this.member = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data)
+    })
   },
   methods: {
-    getTeam() {
-      //axios
-      //member
-    },
     editDescription() {
       this.showEditor = !this.showEditor
     },

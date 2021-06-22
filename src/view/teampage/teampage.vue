@@ -102,7 +102,7 @@ export default {
         task: {
           value: "",
           ddl: "",
-          TaskType: "normal",
+          TaskType: "once",
           privacyType: "public"
         }
       },
@@ -112,87 +112,8 @@ export default {
         memberNum: "",
         description: ""
       },
-      periodTasks: [
-        {
-          id: 0,
-          value: "周期1",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 1,
-          value: "周期2",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        }
-      ],
-      normalTasks: [
-        {
-          id: 0,
-          value: "这是一个我每天都要做的任务",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 1,
-          value: "这是一个任务",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "下一个",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        }
-      ]
+      periodTasks: [],
+      normalTasks: []
     }
   },
   watch: {
@@ -206,22 +127,86 @@ export default {
     }
   },
   created() {
-    //从store获取user
     this.team.teamId = this.$route.params.teamId
-    //axios
-    this.team = {teamId: 0, teamName: "好好学习", memberNum: 10, description: "非常好"}
-  },
-  mounted() {
 
+    this.$axios.get(
+      '/team/getTeam',
+      {
+        params: {
+          teamId: this.team.teamId
+        }
+      }
+    ).then(success => {
+      this.team.description = success.data.description
+      this.team.memberNum = success.data.memberNum
+      this.team.teamName = success.data.name
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data)
+    })
+
+    this.$axios.get(
+      '/task/teamPeriodicTasks',
+      {
+        params: {
+          teamId: this.team.teamId,
+          userId: localStorage.getItem("userId")
+        }
+      }
+    ).then(success => {
+      this.periodTasks = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data)
+    })
+
+    this.$axios.get(
+      '/task/teamOnceTasks',
+      {
+        params: {
+          teamId: this.team.teamId,
+          userId: localStorage.getItem("userId")
+        }
+      }
+    ).then(success => {
+      this.normalTasks = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data)
+    })
   },
   methods: {
     addTask() {
       this.add_task = true
     },
     insertTask() {
-      //TODO
-      //axios
+      this.$axios.post(
+        '/task/addTeamTask',
+        {
+          period: this.buffer.task.TaskType,
+          completeNum: 0,
+          name: this.buffer.task.value,
+          isPrivate: (this.buffer.task.privacyType == "public") ? false : true,
+          deadline: this.dateFormat("YYYY-mm-ddTHH:MM", this.buffer.task.ddl),
+          teamId: this.team.teamId,
+          userId: localStorage.getItem("userId")
+        }
+      ).then(success => {
+        console.log(success.data)
+      }, failure => {
+        console.log(failure.data)
+      })
       console.log(this.buffer.task)
+      this.resetObject(this.buffer.task)
+
+      this.reloadPeriodTask = false;
+      this.$nextTick(() => {
+        this.reloadPeriodTask = true;
+      })
+      this.reloadNormalTask = false;
+      this.$nextTick(() => {
+        this.reloadNormalTask = true;
+      })
     },
     deletePeriodTask(taskId) {
       this.reloadPeriodTask = false;
@@ -263,7 +248,31 @@ export default {
       //confirm
       //back to firstpage
       console.log("exit team")
-    }
+    },
+    dateFormat(fmt, date) {
+      let ret;
+      const opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+      };
+      for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+          fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        }
+      }
+      return fmt;
+    },
+    resetObject(obj) {
+      Object.keys(obj).forEach((key) => {
+        obj[key] = ""
+      })
+    },
   }
 }
 </script>

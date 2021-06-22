@@ -13,14 +13,6 @@ export default {
   props: {
     name: String
   },
-  data() {
-    return {
-      user: {
-        id: 0,
-        token: 0
-      }
-    }
-  },
   computed: {
     isActive() {
       return this.$route.path.indexOf(this.name) !== -1;
@@ -37,9 +29,9 @@ export default {
     },
     getParam() {
       if (this.name == "firstpage") {
-        return {userId: this.user.id}
+        return {userId: localStorage.getItem("userId")}
       } else if (this.name == "user") {
-        return {userId: this.user.id}
+        return {userId: localStorage.getItem("userId")}
       } else {
         return null
       }

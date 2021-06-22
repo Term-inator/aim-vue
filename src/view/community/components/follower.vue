@@ -54,6 +54,10 @@ export default {
       ]
     }
   },
+  created() {
+    //axios
+    //axios
+  },
   methods: {
     visit(userId) {
       this.$router.push({name: 'user', params: {userId: userId}})
