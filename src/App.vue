@@ -29,6 +29,9 @@ export default {
   components: {
     slideBar,
     slideBarItem,
+  },
+  created() {
+
   }
 }
 </script>

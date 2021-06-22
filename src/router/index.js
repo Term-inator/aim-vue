@@ -56,5 +56,13 @@ const router = new VueRouter({
     mode:"history"
 })
 
+router.beforeEach((to, from, next) => {
+  if(to.name != 'login') {
+    if(!localStorage.getItem("token")) {
+      router.replace({name: 'login'})
+    }
+  }
+  next()
+})
 
 export default router

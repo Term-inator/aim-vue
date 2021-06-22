@@ -59,8 +59,17 @@ export default {
   },
   methods: {
     login() {
-      //axios
-      //store
+      this.$axios.post('login',
+        {
+          id: this.user.id,
+          password: this.user.password
+        }).then(success => {
+          localStorage.setItem("userId", success.data.userId)
+          localStorage.setItem("token", success.data.token)
+          console.log(success.data)
+      }),failure => {
+        console.log(failure.data)
+      }
     },
     register() {
       this.resetObject(this.user)
@@ -71,7 +80,7 @@ export default {
       this.$axios.post(
         '/user/addOrUpdate',
         {
-          name: this.user.name,
+          username: this.user.name,
           password: this.user.password
         }).then(success => {
           console.log(this.user.name)

@@ -16,6 +16,12 @@ Vue.config.productionTip = false
 axios.defaults.baseURL = "http://192.168.1.113:8080"
 Vue.prototype.$axios = axios
 
+// axios.interceptors.request.use(config => {
+//   config.headers.token = window.localStorage.getItem("token")
+//   config.headers.id = window.localStorage.getItem("userId")
+//   return config
+// })
+
 new Vue({
   render: h => h(App),
   router,

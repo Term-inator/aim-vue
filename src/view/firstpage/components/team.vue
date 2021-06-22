@@ -127,8 +127,14 @@ export default {
     },
     insertCreate() {//创建一个小组
       this.$axios.post(
-        '/team/addOrUpdate', this.buffer.team
+        '/team/addOrUpdate',
+        {
+          userId: localStorage.getItem("userId"),
+          name: this.buffer.team.name,
+          description: this.buffer.team.description
+        }
       ).then(success => {
+
         console.log(success.data.data)
       }, failure => {
         console.log(failure.data);
