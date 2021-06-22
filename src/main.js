@@ -6,12 +6,17 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import contribution from 'vue-contribution'
 import 'vue-contribution/dist/vue-contribution.css'
+import axios from 'axios'
 
 Vue.use(iView);
 Vue.use(contribution);
+
 Vue.config.productionTip = false
+
+Vue.prototype.$axios = axios
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  axios
 }).$mount('#app')

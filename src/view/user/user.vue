@@ -144,7 +144,6 @@ export default {
     console.log('ok' + this.visitee.id)
   },
   mounted() {
-    
   },
   methods: {
     more() {
