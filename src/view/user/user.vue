@@ -28,13 +28,25 @@
         </Col>
       </Row>
       <Row>
-
+        <Col offset="8">
+          <contribution
+            :data="contribution"
+            :year="2019"
+            :rectWidth="12"
+            :rectHeight="12"
+            :fontSize="10"
+            monthText="en" />
+        </Col>
+      </Row>
+      <Row style="margin: 6vh 0 0 0">
+        <Col offset="2">
+          <b style="font-size: 4vh">消息</b>
+        </Col>
       </Row>
       <Row>
-
-      </Row>
-      <Row>
-
+        <Col>
+        <request></request>
+        </Col>
       </Row>
     </div>
   </div>
@@ -42,10 +54,12 @@
 
 <script>
 import task from '@/components/task'
+import request from './components/request'
 export default {
   name: "user",
   components: {
-    task
+    task,
+    request
   },
   data() {
     return {
@@ -85,6 +99,29 @@ export default {
           isFinish:false,
           ddl: new Date().toLocaleString(),
           isPrivacy:true
+        }
+      ],
+      contribution: {
+        '2019-1-1': 6,
+        '2019-1-2': 1,
+        '2019-1-3': 2,
+        '2019-2-2': 23,
+        '2019-2-3': 13,
+        '2019-2-4': 7,
+        '2019-4-1': 6,
+        '2019-4-2': 1,
+        '2019-5-3': 2,
+        '2019-6-2': 23,
+        '2019-6-3': 13,
+        '2019-6-4': 7,
+        '2019-12-20': 3,
+        '2019-12-21': 0,
+        '2019-12-22': 9,
+        '2019-12-23': 5
+      },
+      requests: [
+        {
+
         }
       ]
     }
@@ -133,10 +170,6 @@ export default {
 </script>
 
 <style scoped>
-.user {
-  overflow: hidden;
-}
-
 .user .main {
   height: 88vh;
   padding: 14vh 0 0 0;

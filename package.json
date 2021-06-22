@@ -11,6 +11,7 @@
     "core-js": "^3.6.5",
     "iview": "^3.5.4",
     "vue": "^2.6.11",
+    "vue-contribution": "^0.1.9",
     "vue-router": "^3.5.1"
   },
   "devDependencies": {
