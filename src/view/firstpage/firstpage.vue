@@ -8,12 +8,12 @@
       </div>
       <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :TaskData="item" :editable="editable" @deleteTask="deletePeriodTask"></task>
+          <task v-if="editable || !item.isPrivate" :TaskData="item" :editable="editable" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
       <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :TaskData="item" :editable="editable" @deleteTask="deleteNormalTask"></task>
+          <task v-if="editable || !item.isPrivate" :TaskData="item" :editable="editable" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
       <team style="float: right;" :VisiteeId="getVisiteeId"></team>
@@ -191,6 +191,16 @@ export default {
       for (let i = 0; i < this.periodTasks.length; ++i) {
         if (this.periodTasks[i].id == taskId) {
           this.periodTasks.splice(i, 1);
+          this.$axios.post(
+            '/task/deletePersonalTask',
+            {
+              taskId: taskId
+            }
+          ).then(success => {
+            console.log(success.data)
+          }, failure => {
+            console.log(failure.data)
+          })
           return
         }
       }

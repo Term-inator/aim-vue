@@ -111,7 +111,7 @@ export default {
         this.member = success.data
         let flag = 0
         this.member.forEach((member) => {
-          if (member.memberId == localStorage.getItem("userId")) {
+          if (member.id == localStorage.getItem("userId")) {
             this.user = member
             flag = 1
           }
@@ -123,7 +123,6 @@ export default {
           }
           this.isNotMember = true
           if(this.isNotMember) {
-            console.log("ok")
             this.$emit("editable")
           }
         }
