@@ -36,7 +36,7 @@
           </Col>
           <Col span="2">
             <Row style="font-size: 2vh;" @click.native="privacy">
-              <div v-if="isPrivacy">公开</div>
+              <div v-if="!isPrivacy">公开</div>
               <div v-else>私密</div>
             </Row>
             <Row>
@@ -85,7 +85,7 @@ export default {
       Green: require('@/assets/img/task/green.svg'),
       period: this.TaskData.period,
       ddl: this.TaskData.deadline.substring(0, 10) + " " + this.TaskData.deadline.substring(11, 16),
-      isPrivacy: this.TaskData.isPrivacy,
+      isPrivacy: this.TaskData.isPrivate,
 
       newValue: "",
       newDdl: "",

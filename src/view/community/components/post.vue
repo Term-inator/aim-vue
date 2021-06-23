@@ -60,12 +60,21 @@ export default {
           followingId: localStorage.getItem("userId")
         }
       ).then(success => {
-        console.log(success.data)
+        if(success.data == false) {
+          this.$Notice.error({
+            title: '关注失败',
+          });
+        }
+        else {
+          this.$Notice.success({
+            title: '关注成功',
+          });
+        }
       }, failure => {
         console.log(failure.data);
       })
-      console.log(this.buffer.post.title)
-      console.log("follow")
+
+      this.$emit("reloadFollower")
     },
   }
 }

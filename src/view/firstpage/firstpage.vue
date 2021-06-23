@@ -157,7 +157,14 @@ export default {
           isPrivate: (this.buffer.task.privacyType == "public") ? false : true,
           deadline: this.dateFormat("YYYY-mm-ddTHH:MM", this.buffer.task.ddl),
           userId: localStorage.getItem("userId")
-        }).then(success => {
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',//设置请求头请求格式为JSON
+            'token': localStorage.getItem("token"), //设置token 其中K名要和后端协调好
+            'id': localStorage.getItem("userId")
+          }
+        },).then(success => {
         console.log(success.data)
       }, failure => {
         console.log(failure.data)

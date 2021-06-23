@@ -32,15 +32,15 @@
       </Row>
       <Row>
         <Col offset="2" span="6" style="padding: 2vh 5vw 0 0">
-          <Button long @click="followBehavior"><p v-if="reloadFollowState">{{ followState }}</p></Button>
+          <Button v-if="this.visitee.id != this.user.id" long @click="followBehavior"><p v-if="reloadFollowState">{{ followState }}</p></Button>
         </Col>
         <Col span="12">
-          <contribution
+          <contribution v-if="loadingContribution"
             :data="contribution"
             :fontSize="10"
             :rectHeight="12"
             :rectWidth="12"
-            :year="2019"
+            :year="year"
             monthText="en"/>
         </Col>
       </Row>
@@ -75,6 +75,9 @@ export default {
       edit_name: false,
       reloadRequests: true,
       reloadFollowState: true,
+      loadingContribution: false,
+      follow: false,
+      year: new Date().getFullYear(),
       buffer: {
         visitee: {
           id: "",
@@ -89,69 +92,9 @@ export default {
         id: 0,
         name: "张三"
       },
-      normalTasks: [
-        {
-          id: 0,
-          value: "这是一个任务",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 1,
-          value: "这是一个任务1",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        },
-        {
-          id: 2,
-          value: "这是一个任务2",
-          isFinish: false,
-          ddl: new Date().toLocaleString(),
-          isPrivacy: true
-        }
-      ],
-      contribution: {
-        '2019-1-1': 6,
-        '2019-1-2': 1,
-        '2019-1-3': 2,
-        '2019-2-2': 23,
-        '2019-2-3': 13,
-        '2019-2-4': 7,
-        '2019-4-1': 6,
-        '2019-4-2': 1,
-        '2019-5-3': 2,
-        '2019-6-2': 23,
-        '2019-6-3': 13,
-        '2019-6-4': 7,
-        '2019-12-20': 3,
-        '2019-12-21': 0,
-        '2019-12-22': 9,
-        '2019-12-23': 5
-      },
-      requests: [
-        {
-          id: 0,
-          value: "球球了",
-          time: 0
-        },
-        {
-          id: 1,
-          value: "球球了1",
-          time: 0
-        },
-        {
-          id: 2,
-          value: "球球了2",
-          time: 0
-        },
-        {
-          id: 3,
-          value: "球球了3",
-          time: 0
-        }
-      ]
+      normalTasks: [],
+      contribution: {},
+      requests: []
     }
   },
   computed: {
@@ -165,34 +108,17 @@ export default {
       }
     },
     followState() {
-      //axios
-      console.log(this.visiteeId)
-      let follow = false
-      // eslint-disable-next-line vue/no-async-in-computed-properties
-      this.$axios.get(
-        '/follow/getFollowState',
-        {
-          params:{
-            followingId: localStorage.getItem("userId"),
-            userId: this.visiteeId,
-          }
-        }
-      ).then(success => {
-        follow = success.data
-        console.log(success.data)
-        console.log(typeof follow)
-        if (follow == true) {
-          return "取消关注"
-        } else {
-          return "关注"
-        }
-      }, failure => {
-        console.log(failure.data);
-      })
-      return "vue nmsl";
+      if(this.follow) {
+        return "取消关注"
+      }
+      else {
+        return "关注"
+      }
     }
   },
   created() {
+    this.user.id = localStorage.getItem("userId")
+    this.user.token = localStorage.getItem("token")
     this.visiteeId = this.$route.params.userId
     //axios查询visitee信息
     this.$axios.get(
@@ -231,12 +157,29 @@ export default {
           userId: this.$route.params.userId
         }
       }).then(success => {
-      console.log(success.data)
-      success.data.forEach(i => {this.contribution[i.finishedAt] = i.amount})
+      success.data.forEach(i => {
+        let date = new Date(i.finishedAt)
+        this.contribution[date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()] = i.amount
+        this.loadingContribution = true
+      })
     }, failure => {
       console.log(failure.data)
     })
 
+    this.$axios.get(
+      '/follow/getFollowState',
+      {
+        params:{
+          followingId: localStorage.getItem("userId"),
+          userId: this.visiteeId,
+        }
+      }
+    ).then(success => {
+      this.follow = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data);
+    })
   },
   mounted() {
   },
@@ -265,11 +208,33 @@ export default {
         this.reloadFollowState = true;
       })
 
-      if (this.followState == "关注") {
+      if (!this.follow) {
         //axios
+        this.$axios.post(
+          '/follow/addFollow',
+          {
+            followingId: localStorage.getItem("userId"),
+            userId: this.visitee.id
+          }
+        ).then(success => {
+          console.log(success.data)
+        }, failure => {
+          console.log(failure.data);
+        })
       } else {
-        //axios
+        this.$axios.post(
+          '/follow/unfollow',
+          {
+            followingId: localStorage.getItem("userId"),
+            userId: this.visitee.id
+          }
+        ).then(success => {
+          console.log(success.data)
+        }, failure => {
+          console.log(failure.data);
+        })
       }
+      this.follow = !this.follow
     },
     deleteRequest(requestId) {
       this.reloadRequests = false;

@@ -17,7 +17,7 @@
           </Row>
         </Col>
         <Col span="6">
-          <follower></follower>
+          <follower v-if="reloadFollower" :reloadFollower="reloadFollowerBar"></follower>
         </Col>
       </Row>
     </div>
@@ -49,45 +49,14 @@ export default {
   data() {
     return {
       is_propagate: false,
+      reloadFollower: true,
       buffer: {
         post: {
           poster: 0, //user
           title: ""
         }
       },
-      posts: [
-        // {
-        //   id: 0,
-        //   poster: 0,
-        //   posterName: "张三",
-        //   created_at: new Date().toLocaleString(),
-        //   title: "123"
-        // },
-        // {
-        //   id: 1,
-        //   poster: 1,
-        //   teamId: 1,
-        //   posterName: "李四",
-        //   created_at: new Date().toLocaleString(),
-        //   title: "456"
-        // },
-        // {
-        //   id: 2,
-        //   poster: 1,
-        //   teamId: 1,
-        //   posterName: "李四",
-        //   created_at: new Date().toLocaleString(),
-        //   title: "平平无奇"
-        // },
-        // {
-        //   id: 3,
-        //   poster: 1,
-        //   teamId: 1,
-        //   posterName: "李四",
-        //   created_at: new Date().toLocaleString(),
-        //   title: "9"
-        // }
-      ]
+      posts: []
     }
   },
   mounted() {
@@ -116,6 +85,13 @@ export default {
     resetObject(obj) {
       Object.keys(obj).forEach((key) => {
         obj[key] = ""
+      })
+    },
+    reloadFollowerBar() {
+      console.log("reloading")
+      this.reloadFollower = true
+      this.$nextTick(() => {
+        this.reloadFollower = false
       })
     }
   },
