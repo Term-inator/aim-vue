@@ -3,9 +3,9 @@
     <div class="main">
       <div class="add-wrapper">
         <div class="title"><b>{{ team.teamName }}</b></div>
-        <img alt="" class="add" src="@/assets/img/add.svg" @click="addTask">
-        <img v-if="user.authority == 'creator'" alt="" class="add" src="@/assets/img/delete.svg" @click="deleteTeam"/>
-        <img v-else alt="" class="add" src="@/assets/img/exit.svg" @click="exitTeam"/>
+        <img v-if="editable" alt="" class="add" src="@/assets/img/add.svg" @click="addTask">
+        <img v-if="user.authority == 'creator' && editable" alt="" class="add" src="@/assets/img/delete.svg" @click="deleteTeam"/>
+        <img v-if="user.authority != 'creator' && editable" alt="" class="add" src="@/assets/img/exit.svg" @click="exitTeam"/>
         <div>
           <div class="title">周期任务</div>
           <div class="title">普通任务</div>
@@ -13,15 +13,15 @@
       </div>
       <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :TaskData="item" :editable="true" @deleteTask="deletePeriodTask"></task>
+          <task :TaskData="item" :editable="editable" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
       <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :TaskData="item" :editable="true" @deleteTask="deleteNormalTask"></task>
+          <task :TaskData="item" :editable="editable" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
-      <teamInfo :TeamData="team" style="float: right;"></teamInfo>
+      <teamInfo :TeamData="team" @editable="inEditable" style="float: right;"></teamInfo>
     </div>
     <Modal
       v-model="add_task"
@@ -93,6 +93,7 @@ export default {
       add_task: false,
       reloadPeriodTask: true,
       reloadNormalTask: true,
+      editable: true,
       user: {
         userId: 0,
         token: 0,
@@ -176,6 +177,10 @@ export default {
     })
   },
   methods: {
+    inEditable() {
+      console.log("okok")
+      this.editable = false
+    },
     addTask() {
       this.add_task = true
     },

@@ -8,12 +8,12 @@
       </div>
       <div v-if="reloadPeriodTask" class="period-task">
         <div v-for="(item, index) in periodTasks" :key="index" class="task">
-          <task :TaskData="item" :editable="true" @deleteTask="deletePeriodTask"></task>
+          <task :TaskData="item" :editable="editable" @deleteTask="deletePeriodTask"></task>
         </div>
       </div>
       <div v-if="reloadNormalTask" class="normal-task">
         <div v-for="(item, index) in normalTasks" :key="index" class="task">
-          <task :TaskData="item" :editable="true" @deleteTask="deleteNormalTask"></task>
+          <task :TaskData="item" :editable="editable" @deleteTask="deleteNormalTask"></task>
         </div>
       </div>
       <team style="float: right;" :VisiteeId="getVisiteeId"></team>
@@ -113,6 +113,14 @@ export default {
   computed: {
     getVisiteeId: function () {
       return this.$route.params.userId
+    },
+    editable: function () {
+      if(this.getVisiteeId == localStorage.getItem("userId")) {
+        return true
+      }
+      else {
+        return false
+      }
     }
   },
   created() {
@@ -157,14 +165,7 @@ export default {
           isPrivate: (this.buffer.task.privacyType == "public") ? false : true,
           deadline: this.dateFormat("YYYY-mm-ddTHH:MM", this.buffer.task.ddl),
           userId: localStorage.getItem("userId")
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',//设置请求头请求格式为JSON
-            'token': localStorage.getItem("token"), //设置token 其中K名要和后端协调好
-            'id': localStorage.getItem("userId")
-          }
-        },).then(success => {
+        }).then(success => {
         console.log(success.data)
       }, failure => {
         console.log(failure.data)
@@ -205,11 +206,20 @@ export default {
       for (let i = 0; i < this.normalTasks.length; ++i) {
         if (this.normalTasks[i].id == taskId) {
           this.normalTasks.splice(i, 1);
+          this.$axios.post(
+            '/task/deletePersonalTask',
+            {
+              taskId: taskId
+            }
+          ).then(success => {
+            console.log(success.data)
+          }, failure => {
+            console.log(failure.data)
+          })
           return
         }
       }
       console.log("err");
-      //axios
     },
     dateFormat(fmt, date) {
       let ret;

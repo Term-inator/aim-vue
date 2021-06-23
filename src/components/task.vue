@@ -132,8 +132,24 @@ export default {
     confirm() {
       this.show()
       this.value = this.newValue
-      this.ddl = new Date(this.newDdl).toLocaleString()
-      //axios
+      let ddl = this.dateFormat("YYYY-mm-ddTHH:MM", new Date(this.newDdl))
+
+      this.$axios.post('/task/addPersonalTask',
+        {
+          period: this.period,
+          id: this.id,
+          teamTaskId: -1,
+          name: this.value,
+          isPrivate: this.isPrivacy,
+          deadline: ddl,
+          userId: localStorage.getItem("userId")
+        }).then(success => {
+        console.log(success.data)
+      }, failure => {
+        console.log(failure.data)
+      })
+
+      this.ddl = this.dateFormat("YYYY-mm-dd HH:MM", new Date(this.newDdl))
     },
     cancel() {
       this.show()
@@ -141,7 +157,26 @@ export default {
     },
     del() {
       this.$emit("deleteTask", this.id)
-    }
+    },
+    dateFormat(fmt, date) {
+      let ret;
+      const opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+      };
+      for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+          fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+        }
+      }
+      return fmt;
+    },
   }
 }
 </script>

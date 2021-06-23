@@ -6,7 +6,7 @@
         <img v-if="showEditor" alt="" class="edit-description" src="@/assets/img/cancel.svg" style="width: 4.2vh; height: 4.2vh"
              @click="cancel">
         <img v-if="showEditor" alt="" class="edit-description" src="@/assets/img/confirm.svg" @click="confirm">
-        <img v-if="!showEditor" alt="" class="edit-description" src="@/assets/img/modify.svg" @click="editDescription"/>
+        <img v-if="!showEditor && !isNotMember" alt="" class="edit-description" src="@/assets/img/modify.svg" @click="editDescription"/>
       </div>
       <div class="description-wrapper">
         <div v-if="showEditor">
@@ -23,13 +23,13 @@
       </div>
       <div v-if="reloadMember" class="member-wrapper">
         <ul>
-          <li v-for="(item, index) in member" :key="index" @click="visitMember(item.memberId)">
+          <li v-for="(item, index) in member" :key="index" @click="visitMember(item.id)">
             <Row>
-              <Col span="18" @click="visitMember(item.memberId)">{{ item.username }}</Col>
+              <Col span="18" @click="visitMember(item.id)">{{ item.username }}</Col>
               <Col offset="2" span="2">
                 <img v-if="user.authority != 'member' && user.id != item.memberId"
                      alt="" src="@/assets/img/teamInfo/kick_out.svg" style="width: 4.2vh; height: 4.2vh"
-                     @click="kickOut(item.memberId)">
+                     @click="kickOut(item.id)">
                 <img v-else alt="">
               </Col>
               <Col span="2" @click.native="changeLevel(item.memberId)">
@@ -81,11 +81,8 @@ export default {
       showEditor: false,
       reloadMember: true,
       change_level: false,
-      user: {
-        id: 0,
-        token: 0,
-        authority: "admin"
-      },
+      isNotMember: false,
+      user: {},
       buffer: {
         member: {
           memberId: "",
@@ -111,9 +108,26 @@ export default {
           teamId: this.team.teamId
         }
       }).then(success => {
-      this.member = success.data
-      console.log(success.data)
-    }, failure => {
+        this.member = success.data
+        let flag = 0
+        this.member.forEach((member) => {
+          if (member.memberId == localStorage.getItem("userId")) {
+            this.user = member
+            flag = 1
+          }
+        })
+        if (!flag) {
+          this.user = {
+            id: localStorage.getItem("userId"),
+            authority: "member" //占坑
+          }
+          this.isNotMember = true
+          if(this.isNotMember) {
+            console.log("ok")
+            this.$emit("editable")
+          }
+        }
+      }, failure => {
       console.log(failure.data)
     })
   },
@@ -163,6 +177,7 @@ export default {
       }
     },
     visitMember(memberId) {
+      console.log(memberId)
       this.$router.push({name: "user", params: {userId: memberId}})
     },
     resetObject(obj) {

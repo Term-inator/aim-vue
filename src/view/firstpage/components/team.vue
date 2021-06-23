@@ -2,7 +2,7 @@
   <div class="team">
     <div class="create">
       <div class="title">
-        你创建的小组
+        创建的小组
         <img alt="" class="create-team" src="@/assets/img/add.svg" @click="createTeam"/>
       </div>
       <div class="create-wrapper">
@@ -13,7 +13,7 @@
     </div>
     <div class="join">
       <div class="title">
-        你加入的小组
+        加入的小组
         <img alt="" class="join-team" src="@/assets/img/add.svg" @click="joinTeam"/>
       </div>
       <div class="join-wrapper">

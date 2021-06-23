@@ -11,13 +11,13 @@
           <Row>
             <Col span="24" style="padding: 0 0 0 2vw;">
               <div v-for="(item, index) in posts" :key="index" style="display: inline-block; margin: 0 2vw 2vh 0">
-                <post :PostData="item"></post>
+                <post :PostData="item" @reloadFollower="reloadFollowerBar"></post>
               </div>
             </Col>
           </Row>
         </Col>
         <Col span="6">
-          <follower v-if="reloadFollower" :reloadFollower="reloadFollowerBar"></follower>
+          <follower v-if="reloadFollower"></follower>
         </Col>
       </Row>
     </div>
@@ -89,9 +89,9 @@ export default {
     },
     reloadFollowerBar() {
       console.log("reloading")
-      this.reloadFollower = true
+      this.reloadFollower = false
       this.$nextTick(() => {
-        this.reloadFollower = false
+        this.reloadFollower = true
       })
     }
   },
