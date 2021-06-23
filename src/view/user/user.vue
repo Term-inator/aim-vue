@@ -166,18 +166,77 @@ export default {
     },
     followState() {
       //axios
-      let follow = true
-      if (follow) {
-        return "取消关注"
-      } else {
-        return "关注"
-      }
+      console.log(this.visiteeId)
+      let follow = false
+      // eslint-disable-next-line vue/no-async-in-computed-properties
+      this.$axios.get(
+        '/follow/getFollowState',
+        {
+          params:{
+            followingId: localStorage.getItem("userId"),
+            userId: this.visiteeId,
+          }
+        }
+      ).then(success => {
+        follow = success.data
+        console.log(success.data)
+        console.log(typeof follow)
+        if (follow == true) {
+          return "取消关注"
+        } else {
+          return "关注"
+        }
+      }, failure => {
+        console.log(failure.data);
+      })
+      return "vue nmsl";
     }
   },
   created() {
     this.visiteeId = this.$route.params.userId
     //axios查询visitee信息
+    this.$axios.get(
+      '/user/getUser',
+      {
+        params:{
+          userId: this.$route.params.userId
+        }
+      }
+    ).then(success => {
+      this.visitee.id = this.visiteeId
+      this.visitee.name = success.data.username
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data);
+    })
     console.log('ok' + this.visitee.id)
+
+    this.$axios.get(
+      '/task/personalOnceTasks',
+      {
+        params: {
+          userId: this.$route.params.userId
+        }
+      }).then(success => {
+      console.log(success.data)
+      this.normalTasks = success.data
+    }, failure => {
+      console.log(failure.data)
+    })
+
+    this.$axios.get(
+      '/task/getTaskRecord',
+      {
+        params: {
+          userId: this.$route.params.userId
+        }
+      }).then(success => {
+      console.log(success.data)
+      success.data.forEach(i => {this.contribution[i.finishedAt] = i.amount})
+    }, failure => {
+      console.log(failure.data)
+    })
+
   },
   mounted() {
   },

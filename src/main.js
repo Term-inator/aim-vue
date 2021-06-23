@@ -13,7 +13,7 @@ Vue.use(contribution);
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = "http://192.168.1.113:8080"
+axios.defaults.baseURL = "http://localhost:8080"
 Vue.prototype.$axios = axios
 
 // axios.interceptors.request.use(config => {

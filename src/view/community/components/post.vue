@@ -14,7 +14,7 @@
             </Row>
             <Row>
               <Col offset="2" span="18">
-                <span style="font-size: 1.8vh;"> {{ created_at }} </span>
+                <span style="font-size: 1.8vh;"> {{ createdAt }} </span>
               </Col>
             </Row>
           </Col>
@@ -44,14 +44,29 @@ export default {
       poster: this.PostData.poster,
       posterName: this.PostData.posterName,
       title: this.PostData.title,
-      created_at: this.PostData.created_at,
+      createdAt: this.PostData.createdAt.substring(0, 10) + " " + this.PostData.createdAt.substring(11, 16),
+      //createdAt: this.dateFormat("YYYY-mm-dd HH:MM", this.PostData.createdAt),
     }
+  },
+  created() {
+
   },
   methods: {
     follow() {
-      //axios
+      this.$axios.post(
+        '/follow/addFollow',
+        {
+          userId: this.poster,
+          followingId: localStorage.getItem("userId")
+        }
+      ).then(success => {
+        console.log(success.data)
+      }, failure => {
+        console.log(failure.data);
+      })
+      console.log(this.buffer.post.title)
       console.log("follow")
-    }
+    },
   }
 }
 </script>

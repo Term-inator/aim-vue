@@ -6,7 +6,7 @@
       </div>
       <div class="interest-wrapper">
         <ul>
-          <li v-for="(item, index) in interest" :key="index" @click="visit(item.id)">{{ item.name }}</li>
+          <li v-for="(item, index) in interest" :key="index" @click="visit(item.id)">{{ item.username }}</li>
         </ul>
       </div>
     </div>
@@ -16,7 +16,7 @@
       </div>
       <div class="follow-wrapper">
         <ul>
-          <li v-for="(item, index) in follow" :key="index" @click="visit(item.id)">{{ item.name }}</li>
+          <li v-for="(item, index) in follow" :key="index" @click="visit(item.id)">{{ item.username }}</li>
         </ul>
       </div>
     </div>
@@ -55,8 +55,33 @@ export default {
     }
   },
   created() {
+    this.$axios.get(
+      '/follow/getUsersFollowing',
+      {
+        params:{
+          userId: localStorage.getItem("userId"),
+        }
+      }
+    ).then(success => {
+      this.follow = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data);
+    })
     //axios
-    //axios
+    this.$axios.get(
+      '/follow/wouldLikeToFollow',
+      {
+        params:{
+          userId: localStorage.getItem("userId"),
+        }
+      }
+    ).then(success => {
+      this.interest = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data);
+    })
   },
   methods: {
     visit(userId) {

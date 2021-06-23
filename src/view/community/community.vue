@@ -56,37 +56,37 @@ export default {
         }
       },
       posts: [
-        {
-          id: 0,
-          poster: 0,
-          posterName: "张三",
-          created_at: new Date().toLocaleString(),
-          title: "123"
-        },
-        {
-          id: 1,
-          poster: 1,
-          teamId: 1,
-          posterName: "李四",
-          created_at: new Date().toLocaleString(),
-          title: "456"
-        },
-        {
-          id: 2,
-          poster: 1,
-          teamId: 1,
-          posterName: "李四",
-          created_at: new Date().toLocaleString(),
-          title: "平平无奇"
-        },
-        {
-          id: 3,
-          poster: 1,
-          teamId: 1,
-          posterName: "李四",
-          created_at: new Date().toLocaleString(),
-          title: "9"
-        }
+        // {
+        //   id: 0,
+        //   poster: 0,
+        //   posterName: "张三",
+        //   created_at: new Date().toLocaleString(),
+        //   title: "123"
+        // },
+        // {
+        //   id: 1,
+        //   poster: 1,
+        //   teamId: 1,
+        //   posterName: "李四",
+        //   created_at: new Date().toLocaleString(),
+        //   title: "456"
+        // },
+        // {
+        //   id: 2,
+        //   poster: 1,
+        //   teamId: 1,
+        //   posterName: "李四",
+        //   created_at: new Date().toLocaleString(),
+        //   title: "平平无奇"
+        // },
+        // {
+        //   id: 3,
+        //   poster: 1,
+        //   teamId: 1,
+        //   posterName: "李四",
+        //   created_at: new Date().toLocaleString(),
+        //   title: "9"
+        // }
       ]
     }
   },
@@ -99,6 +99,17 @@ export default {
     },
     insertPost() {
       //axios
+      this.$axios.post(
+        '/post/addPost',
+        {
+          poster: localStorage.getItem("userId"),
+          title: this.buffer.post.title,
+        }
+      ).then(success => {
+        console.log(success.data)
+      }, failure => {
+        console.log(failure.data);
+      })
       console.log(this.buffer.post.title)
       this.resetObject(this.buffer.post)
     },
@@ -107,6 +118,17 @@ export default {
         obj[key] = ""
       })
     }
+  },
+  created() {
+    this.$axios.get(
+      '/post/getRecentPosts',
+    ).then(success => {
+      console.log(success.data)
+      this.posts = success.data
+      console.log(success.data)
+    }, failure => {
+      console.log(failure.data);
+    })
   }
 }
 </script>
